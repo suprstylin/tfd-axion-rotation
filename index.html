@@ -36,7 +36,7 @@
         h1 {
             color: #333;
             text-align: center;
-            margin-bottom: 12px; /* Reduced from 22px by 10px */
+            margin-bottom: 12px;
             font-size: 1.2rem;
         }
 
@@ -300,10 +300,9 @@
             top: -9999px;
             width: 800px;
             background-color: white;
-            padding: 12px 10px 1px 10px; /* Increased top padding from 2px to 12px */
+            padding: 12px 10px 1px 10px;
             border-radius: 0;
             box-shadow: 0 0 0 rgba(0,0,0,0);
-            /* Force desktop styles for screenshot */
             font-size: 11px !important;
         }
 
@@ -334,7 +333,6 @@
             width: 63px !important;
         }
 
-        /* Force desktop row heights */
         #screenshot-container .even-timezone-table tbody tr.half-hour-row {
             height: 25px !important;
         }
@@ -350,8 +348,8 @@
         .screenshot-title {
             color: #333;
             text-align: center;
-            margin-bottom: 12px; /* Same as website: 12px */
-            font-size: 1.2rem; /* Same as website: 1.2rem */
+            margin-bottom: 12px;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 
@@ -359,7 +357,7 @@
             background-color: #e3f2fd;
             padding: 6px;
             border-radius: 3px;
-            margin-bottom: 8px; /* Same as website: 8px */
+            margin-bottom: 8px;
             font-size: 10px;
         }
 
@@ -387,7 +385,7 @@
             
             h1 {
                 font-size: 1.1rem;
-                margin-bottom: 10px; /* Adjusted */
+                margin-bottom: 10px;
             }
             
             table {
@@ -408,7 +406,6 @@
                 width: 58px;
             }
             
-            /* Adjust row heights for smaller screens */
             .even-timezone-table tbody tr.half-hour-row {
                 height: 22px !important;
             }
@@ -433,7 +430,7 @@
             
             h1 {
                 font-size: 1.0rem;
-                margin-bottom: 8px; /* Adjusted */
+                margin-bottom: 8px;
             }
             
             table {
@@ -457,7 +454,7 @@
             }
             
             .page-footer {
-                font-size: 9px; /* Match the top blue box font size */
+                font-size: 9px;
             }
             
             thead .time-column,
@@ -477,17 +474,31 @@
             table:not(.even-timezone-table) tbody tr {
                 height: 28px !important;
             }
+            
+            /* Mobile-specific: Use shorter names */
+            .mobile-short {
+                font-size: 7px !important;
+                letter-spacing: -0.2px;
+            }
         }
 
         @media (max-width: 576px) {
-            table {
-                font-size: 7px;
-                margin: 10px 0;
+            body {
+                padding: 6px;
+            }
+            
+            .schedule-container {
+                padding: 6px;
             }
             
             h1 {
                 font-size: 0.9rem;
-                margin-bottom: 6px; /* Adjusted */
+                margin-bottom: 6px;
+            }
+            
+            table {
+                font-size: 7px;
+                margin: 10px 0;
             }
             
             th, td {
@@ -519,7 +530,7 @@
             }
             
             .page-footer {
-                font-size: 8px; /* Match the top blue box font size */
+                font-size: 8px;
             }
             
             .timezone-display-row {
@@ -536,7 +547,6 @@
                 width: 48px;
             }
             
-            /* Adjust row heights for smallest screens */
             .even-timezone-table tbody tr.half-hour-row {
                 height: 18px !important;
             }
@@ -548,90 +558,132 @@
             table:not(.even-timezone-table) tbody tr {
                 height: 25px !important;
             }
+            
+            /* Mobile-specific: Use shorter names */
+            .mobile-short {
+                font-size: 6.5px !important;
+                letter-spacing: -0.3px;
+            }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 480px) and (orientation: portrait) {
+            /* Portrait-specific mobile adjustments */
             body {
-                padding: 6px;
+                padding: 4px;
             }
             
             .schedule-container {
-                padding: 6px;
+                padding: 4px;
+                max-width: 100%;
             }
             
             h1 {
-                font-size: 0.85rem;
-                margin-bottom: 4px; /* Adjusted */
+                font-size: 0.8rem;
+                margin-bottom: 4px;
             }
             
             table {
-                font-size: 6.5px;
-                margin: 8px 0;
+                font-size: 6px;
+                margin: 6px 0;
             }
             
             th, td {
-                padding: 1px 1px;
+                padding: 1px 0.5px;
+                font-size: 6px;
             }
             
             thead .time-column,
             tbody .time-column {
-                width: 43px;
+                width: 40px;
                 font-size: 0.4rem;
+                padding: 1px;
             }
             
             th {
                 font-size: 0.4rem;
+                padding: 2px 0.5px;
+                height: 20px;
             }
             
             .note, .cycle-box, .even-tz-note {
-                font-size: 7.5px;
+                font-size: 7px;
                 padding: 4px;
             }
             
             .cycle-box strong, .cycle-box li {
-                font-size: 7.5px;
+                font-size: 7px;
             }
             
             .timezone-info {
-                padding: 6px;
+                padding: 5px;
             }
             
             .timezone-info label,
             .timezone-selector,
             .current-timezone,
             .export-link {
-                font-size: 7.5px;
+                font-size: 7px;
             }
             
             .page-footer {
-                font-size: 7.5px; /* Match the top blue box font size */
+                font-size: 7px;
             }
             
             .timezone-selector {
-                padding: 4px;
+                padding: 3px;
             }
             
-            /* Keep event names in one line */
+            .timezone-display-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 3px;
+            }
+            
+            .export-link {
+                align-self: flex-start;
+                margin-top: 2px;
+            }
+            
+            /* Row height adjustments for portrait */
+            .even-timezone-table tbody tr.half-hour-row {
+                height: 16px !important;
+            }
+            
+            .even-timezone-table tbody tr.two-hour-row {
+                height: 20px !important;
+            }
+            
+            table:not(.even-timezone-table) tbody tr {
+                height: 20px !important;
+            }
+            
+            /* Force even smaller text for table cells in portrait */
             td {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                font-size: 6px !important;
+                line-height: 1;
+                letter-spacing: -0.2px;
+            }
+            
+            /* Mobile-specific: Use shorter names */
+            .mobile-short {
+                font-size: 5.5px !important;
+                letter-spacing: -0.4px;
             }
         }
 
-        @media (max-width: 360px) {
+        @media (max-width: 360px) and (orientation: portrait) {
             table {
-                font-size: 6px;
+                font-size: 5.5px;
             }
             
             h1 {
-                font-size: 0.8rem;
-                margin-bottom: 2px; /* Adjusted */
+                font-size: 0.75rem;
+                margin-bottom: 3px;
             }
             
             thead .time-column,
             tbody .time-column {
-                width: 41px;
+                width: 36px;
                 font-size: 0.35rem;
             }
             
@@ -640,31 +692,36 @@
             }
             
             .page-footer {
-                font-size: 7px; /* Match the top blue box font size */
+                font-size: 6.5px;
             }
             
-            /* Reduce row heights for very small screens */
             .even-timezone-table tbody tr.half-hour-row {
-                height: 16px !important;
+                height: 14px !important;
             }
             
             .even-timezone-table tbody tr.two-hour-row {
-                height: 22px !important;
+                height: 18px !important;
             }
             
             table:not(.even-timezone-table) tbody tr {
-                height: 22px !important;
+                height: 18px !important;
+            }
+            
+            /* Mobile-specific: Use shorter names */
+            .mobile-short {
+                font-size: 5px !important;
+                letter-spacing: -0.5px;
             }
         }
 
-        @media (max-width: 320px) {
+        @media (max-width: 320px) and (orientation: portrait) {
             table {
-                font-size: 5.5px;
+                font-size: 5px;
             }
             
             thead .time-column,
             tbody .time-column {
-                width: 38px;
+                width: 34px;
             }
             
             .timezone-display-row {
@@ -674,11 +731,42 @@
             
             .export-link {
                 align-self: flex-start;
-                margin-top: 4px;
+                margin-top: 2px;
             }
             
             .page-footer {
-                font-size: 6.5px; /* Match the top blue box font size */
+                font-size: 6px;
+            }
+            
+            /* Mobile-specific: Use shorter names */
+            .mobile-short {
+                font-size: 4.5px !important;
+                letter-spacing: -0.6px;
+            }
+        }
+
+        /* Landscape adjustments */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .schedule-container {
+                padding: 8px;
+                max-width: 95%;
+            }
+            
+            table {
+                font-size: 7px;
+            }
+            
+            th, td {
+                padding: 2px 1px;
+            }
+            
+            thead .time-column,
+            tbody .time-column {
+                width: 50px;
+            }
+            
+            .mobile-short {
+                font-size: 6.5px !important;
             }
         }
     </style>
@@ -795,15 +883,34 @@
             'SRD': 'Sealed Resident District'
         };
 
-        const displayNames = {
-            'AX_Power': 'AX Power',
-            'TRI': 'TRI',
-            'EDZ': 'EDZ',
-            'AX_Vault': 'AX Vault',
-            'Crater': 'Crater',
-            'AX_Refinery': 'AX Refinery',
-            'SRD': 'SRD'
-        };
+        // Shorter display names for mobile
+        function getDisplayNames() {
+            const isMobilePortrait = window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
+            
+            if (isMobilePortrait) {
+                // Short names for mobile portrait view
+                return {
+                    'AX_Power': 'Power',
+                    'TRI': 'TRI',
+                    'EDZ': 'EDZ',
+                    'AX_Vault': 'AXV',
+                    'Crater': 'FC',
+                    'AX_Refinery': 'AXR',
+                    'SRD': 'SRD'
+                };
+            } else {
+                // Regular display names for desktop and landscape
+                return {
+                    'AX_Power': 'AX Power',
+                    'TRI': 'TRI',
+                    'EDZ': 'EDZ',
+                    'AX_Vault': 'AX Vault',
+                    'Crater': 'Crater',
+                    'AX_Refinery': 'AX Refinery',
+                    'SRD': 'SRD'
+                };
+            }
+        }
 
         // Basic 7-event cycle
         const baseEventOrder = [
@@ -936,15 +1043,12 @@
                 if (isHalfSlot) {
                     if (isFirstHalf) {
                         // First row (00:00-01:00): second half of the event from previous day 23:00-01:00
-                        // This is the event that started at 23:00 on the previous day
-                        // For Monday (dayIndex 0), this is Sunday's last event which would be at slot 83
                         totalSlots = ((dayIndex - 1) * 12 + 11) % 84;
                         if (dayIndex === 0) {
                             totalSlots = 83; // Sunday's last full event (slot 11 of day 6)
                         }
                     } else {
                         // Last row (23:00-00:00): first half of the event that spans to next day
-                        // This event starts at 23:00 and goes until 01:00 next day
                         totalSlots = (dayIndex * 12) + 11;
                     }
                 } else {
@@ -975,6 +1079,7 @@
             
             const isEven = isEvenTimezone(timezoneOffset);
             const timeSlots = isEven ? getTimeSlotsEven() : getTimeSlotsOdd();
+            const displayNames = getDisplayNames();
             
             timeSlots.forEach((timeSlot, timeSlotIndex) => {
                 const row = document.createElement('tr');
@@ -982,10 +1087,8 @@
                 // Add row height classes for even timezones
                 if (isEven) {
                     if (timeSlotIndex === 0 || timeSlotIndex === timeSlots.length - 1) {
-                        // First and last rows are 1-hour slots (25px)
                         row.classList.add('half-hour-row');
                     } else {
-                        // Middle rows are 2-hour slots (35px)
                         row.classList.add('two-hour-row');
                     }
                 }
@@ -1004,10 +1107,10 @@
                     if (isEven) {
                         if (timeSlotIndex === 0) {
                             isHalfSlot = true;
-                            isFirstHalf = true; // 00:00-01:00 is second half
+                            isFirstHalf = true;
                         } else if (timeSlotIndex === timeSlots.length - 1) {
                             isHalfSlot = true;
-                            isFirstHalf = false; // 23:00-00:00 is first half
+                            isFirstHalf = false;
                         }
                     }
                     
@@ -1022,21 +1125,24 @@
                         const displayName1 = displayNames[part1] || part1;
                         const displayName2 = displayNames[part2] || part2;
                         
+                        // Check if we're on mobile portrait for adding special class
+                        const isMobilePortrait = window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
+                        
                         // Create colored text for AX Power only, rest in black
                         let cellContent = '';
                         
                         if (part1 === 'AX_Power') {
-                            cellContent += `<span class="axpower-text">${displayName1}</span>`;
+                            cellContent += `<span class="axpower-text ${isMobilePortrait ? 'mobile-short' : ''}">${displayName1}</span>`;
                         } else {
-                            cellContent += `<span class="black-text">${displayName1}</span>`;
+                            cellContent += `<span class="black-text ${isMobilePortrait ? 'mobile-short' : ''}">${displayName1}</span>`;
                         }
                         
-                        cellContent += '<span class="black-text"> / </span>';
+                        cellContent += `<span class="black-text ${isMobilePortrait ? 'mobile-short' : ''}"> / </span>`;
                         
                         if (part2 === 'AX_Power') {
-                            cellContent += `<span class="axpower-text">${displayName2}</span>`;
+                            cellContent += `<span class="axpower-text ${isMobilePortrait ? 'mobile-short' : ''}">${displayName2}</span>`;
                         } else {
-                            cellContent += `<span class="black-text">${displayName2}</span>`;
+                            cellContent += `<span class="black-text ${isMobilePortrait ? 'mobile-short' : ''}">${displayName2}</span>`;
                         }
                         
                         cell.innerHTML = cellContent;
@@ -1086,7 +1192,6 @@
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
             
-            // ALWAYS use desktop width (800px) for consistent image generation
             screenshotContainer.style.width = '800px';
             
             // Create title
@@ -1116,13 +1221,17 @@
             // Ensure AX Power cells have red background and proper text styling
             const cells = table.querySelectorAll('td');
             cells.forEach(cell => {
-                if (cell.innerHTML.includes('AX Power')) {
+                if (cell.innerHTML.includes('AX Power') || cell.innerHTML.includes('Power')) {
                     // Make sure AX Power text is red and other text is black
                     const content = cell.innerHTML;
-                    if (content.includes('AX Power /')) {
-                        cell.innerHTML = `<span class="axpower-text">AX Power</span><span class="black-text"> / ${content.split(' / ')[1]}</span>`;
-                    } else if (content.includes('/ AX Power')) {
-                        cell.innerHTML = `<span class="black-text">${content.split(' / ')[0]} / </span><span class="axpower-text">AX Power</span>`;
+                    if (content.includes('AX Power /') || content.includes('Power /')) {
+                        const firstPart = content.includes('AX Power') ? 'AX Power' : 'Power';
+                        const secondPart = content.split(' / ')[1];
+                        cell.innerHTML = `<span class="axpower-text">${firstPart}</span><span class="black-text"> / ${secondPart}</span>`;
+                    } else if (content.includes('/ AX Power') || content.includes('/ Power')) {
+                        const secondPart = content.includes('/ AX Power') ? 'AX Power' : 'Power';
+                        const firstPart = content.split(' / ')[0];
+                        cell.innerHTML = `<span class="black-text">${firstPart} / </span><span class="axpower-text">${secondPart}</span>`;
                     }
                     // Ensure the cell has the axpower class for background
                     cell.classList.add('axpower');
@@ -1136,7 +1245,7 @@
 
         // Export table as image - always generate same quality image
         function exportTableAsImage(event) {
-            event.preventDefault(); // Prevent link from navigating
+            event.preventDefault();
             
             const currentTimezoneName = document.getElementById('current-tz-display').textContent;
             const screenshotContainer = createScreenshotContent(currentTimezoneName);
@@ -1145,9 +1254,8 @@
             // Show loading overlay
             overlay.style.display = 'flex';
             
-            // ALWAYS use same dimensions for consistent image output
-            const targetWidth = 1600; // Double the container width for high quality
-            const scale = 2; // Fixed scale for consistent quality
+            const targetWidth = 1600;
+            const scale = 2;
             
             // Use html2canvas to capture the screenshot container
             html2canvas(screenshotContainer, {
@@ -1160,12 +1268,10 @@
                 windowWidth: 800,
                 windowHeight: screenshotContainer.scrollHeight,
                 onclone: function(clonedDoc) {
-                    // Ensure minimal white space in the cloned version
                     const clonedContainer = clonedDoc.getElementById('screenshot-container');
                     if (clonedContainer) {
                         clonedContainer.style.padding = '12px 10px 1px 10px';
                         clonedContainer.style.boxShadow = 'none';
-                        // Force desktop styles
                         clonedContainer.style.fontSize = '11px';
                     }
                 }
@@ -1193,6 +1299,16 @@
             });
         }
 
+        // Handle window resize to regenerate schedule with appropriate display names
+        let resizeTimeout;
+        function handleResize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                const currentTimezone = parseInt(document.getElementById('timezone-selector').value);
+                generateSchedule(currentTimezone);
+            }, 250);
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             const selector = document.getElementById('timezone-selector');
@@ -1215,6 +1331,9 @@
             
             // Add event listener for export link
             exportLink.addEventListener('click', exportTableAsImage);
+            
+            // Add resize event listener
+            window.addEventListener('resize', handleResize);
         });
     </script>
 </body>
