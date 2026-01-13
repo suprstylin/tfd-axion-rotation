@@ -17,74 +17,74 @@
             font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
             background: #f5f5f5;
             color: #333;
-            line-height: 1.3;
+            line-height: 1.2;
             min-height: 100vh;
-            padding: 16px;
-            font-size: 13px;
+            padding: 10px;
+            font-size: 11px;
         }
 
         .schedule-container {
             background-color: white;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            max-width: 1200px;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 800px; /* Increased from 750px to accommodate wider cells */
             margin: 0 auto;
         }
 
         h1 {
             color: #333;
             text-align: center;
-            margin-bottom: 16px;
-            font-size: 1.6rem;
+            margin-bottom: 12px;
+            font-size: 1.4rem;
         }
 
         .note {
             background-color: #e3f2fd;
-            padding: 8px;
-            border-radius: 4px;
-            margin: 12px 0;
-            font-size: 11.2px;
+            padding: 6px;
+            border-radius: 3px;
+            margin: 8px 0;
+            font-size: 10px;
         }
 
         .even-tz-note {
             background-color: #e8f5e9;
-            padding: 8px;
-            border-radius: 4px;
-            margin: 12px 0;
-            font-size: 11.2px;
+            padding: 6px;
+            border-radius: 3px;
+            margin: 8px 0;
+            font-size: 10px;
             display: none;
         }
 
         .timezone-info {
-            margin-bottom: 16px;
-            padding: 12px;
+            margin-bottom: 12px;
+            padding: 8px;
             background-color: #f9f9f9;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         .timezone-info label {
             display: block;
             color: #333;
             font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 11.2px;
+            margin-bottom: 4px;
+            font-size: 10px;
         }
 
         .timezone-selector {
             width: 100%;
-            padding: 8px;
+            padding: 6px;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 11.2px;
+            border-radius: 3px;
+            font-size: 10px;
             background-color: white;
         }
 
         .current-timezone {
             display: block;
-            margin-top: 6px;
+            margin-top: 4px;
             color: #666;
-            font-size: 11.2px;
+            font-size: 10px;
         }
 
         .current-timezone strong {
@@ -94,44 +94,49 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 10px;
+            margin: 14px 0;
+            font-size: 8.5px;
             border: 1px solid #e0e0e0;
+            table-layout: fixed;
         }
 
         th {
             background-color: #4a6fa5;
             color: white;
             font-weight: bold;
-            padding: 5px 4px;
+            padding: 3px 2px; /* Added 1px horizontal padding */
             text-align: center;
             border: 1px solid #3a5a8a;
-            font-size: 0.63rem;
-            height: 32px;
+            font-size: 0.55rem;
+            height: 24px;
         }
 
         td {
-            padding: 4px 3px;
+            padding: 2px 2px; /* Added 1px horizontal padding (from 1px to 2px) */
             text-align: center;
             border: 1px solid #ddd;
-            min-width: 88px;
             vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         thead .time-column {
             background-color: #4a6fa5;
             color: white;
             border: 1px solid #3a5a8a;
+            width: 63px; /* Increased from 60px to 63px */
         }
 
         tbody .time-column {
             background-color: #e8eaf6;
             color: #000;
             font-weight: bold;
-            min-width: 72px;
             border: 1px solid #c5cae9;
-            font-size: 0.63rem;
-            padding: 4px 3px;
+            font-size: 0.55rem;
+            padding: 2px 2px; /* Added 1px horizontal padding */
+            width: 63px; /* Increased from 60px to 63px */
+            white-space: nowrap;
         }
 
         .axpower {
@@ -141,7 +146,7 @@
         }
 
         .half-event {
-            padding: 2px 3px;
+            padding: 1px 2px; /* Added 1px horizontal padding */
         }
 
         .half-event.axpower {
@@ -153,19 +158,19 @@
             transition: height 0.3s ease;
         }
 
-        /* Default height for 1-hour rows (smaller) */
+        /* 1-hour rows (25px) */
         .even-timezone-table tbody tr.half-hour-row {
-            height: 20px; /* Smaller 1-hour rows */
+            height: 25px !important;
         }
 
-        /* 2-hour rows are 50% bigger than 1-hour rows */
+        /* 2-hour rows (35px) */
         .even-timezone-table tbody tr.two-hour-row {
-            height: 30px; /* 20px * 1.5 = 30px */
+            height: 35px !important;
         }
 
-        /* For odd timezones, all rows are 2-hour and should match the height of even timezone 2-hour rows */
+        /* For odd timezones, all rows are 2-hour */
         table:not(.even-timezone-table) tbody tr {
-            height: 30px; /* Same as even timezone 2-hour rows */
+            height: 35px !important;
         }
 
         tr:nth-child(even) {
@@ -178,77 +183,77 @@
 
         .cycle-box {
             background-color: #e3f2fd;
-            padding: 8px;
-            border-radius: 4px;
-            margin: 12px 0;
-            font-size: 11.2px;
+            padding: 6px;
+            border-radius: 3px;
+            margin: 8px 0;
+            font-size: 10px;
         }
 
         .cycle-box strong {
             color: #333;
             display: block;
-            margin-bottom: 6px;
-            font-size: 11.2px;
+            margin-bottom: 4px;
+            font-size: 10px;
             font-weight: bold;
         }
 
         .cycle-box ol {
-            padding-left: 16px;
+            padding-left: 12px;
             margin: 0;
         }
 
         .cycle-box li {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: #555;
-            font-size: 11.2px;
-            line-height: 1.3;
+            font-size: 10px;
+            line-height: 1.2;
         }
 
         .page-footer {
             text-align: center;
-            padding: 12px;
+            padding: 8px;
             color: #666;
-            font-size: 0.75rem;
-            margin-top: 16px;
+            font-size: 0.65rem;
+            margin-top: 12px;
             border-top: 1px solid #eee;
         }
 
         /* Responsive design */
-        @media (max-width: 1200px) {
-            .schedule-container {
-                padding: 12px;
-            }
-        }
-
         @media (max-width: 992px) {
+            .schedule-container {
+                padding: 10px;
+                max-width: 95%;
+            }
+            
             table {
-                font-size: 9px;
+                font-size: 8px;
             }
             
             th, td {
-                padding: 4px 3px;
+                padding: 2px 2px; /* Keep 2px horizontal padding */
             }
             
             th {
-                font-size: 0.56rem;
+                font-size: 0.5rem;
             }
             
             thead .time-column,
             tbody .time-column {
-                font-size: 0.56rem;
+                font-size: 0.5rem;
+                width: 58px; /* Increased from 55px to 58px */
             }
             
             /* Adjust row heights for smaller screens */
             .even-timezone-table tbody tr.half-hour-row {
-                height: 18px;
+                height: 22px !important;
             }
             
             .even-timezone-table tbody tr.two-hour-row {
-                height: 27px; /* 18px * 1.5 = 27px */
+                height: 31px !important;
             }
             
             table:not(.even-timezone-table) tbody tr {
-                height: 27px;
+                height: 31px !important;
             }
         }
 
@@ -258,90 +263,203 @@
             }
             
             .schedule-container {
-                padding: 10px;
+                padding: 8px;
             }
             
             h1 {
-                font-size: 1.28rem;
+                font-size: 1.2rem;
             }
             
             table {
-                font-size: 9px;
-                margin: 16px 0;
+                font-size: 7.5px;
+                margin: 12px 0;
             }
             
             .note, .cycle-box, .even-tz-note {
-                font-size: 10px;
+                font-size: 9px;
             }
             
             .cycle-box strong, .cycle-box li {
-                font-size: 10px;
+                font-size: 9px;
             }
             
             .timezone-info label,
             .timezone-selector,
             .current-timezone {
-                font-size: 10px;
+                font-size: 9px;
+            }
+            
+            thead .time-column,
+            tbody .time-column {
+                width: 53px; /* Increased from 50px to 53px */
             }
             
             /* Adjust row heights for mobile */
             .even-timezone-table tbody tr.half-hour-row {
-                height: 16px;
+                height: 20px !important;
             }
             
             .even-timezone-table tbody tr.two-hour-row {
-                height: 24px; /* 16px * 1.5 = 24px */
+                height: 28px !important;
             }
             
             table:not(.even-timezone-table) tbody tr {
-                height: 24px;
+                height: 28px !important;
             }
         }
 
         @media (max-width: 576px) {
             table {
-                font-size: 8px;
-                margin: 12px 0;
+                font-size: 7px;
+                margin: 10px 0;
             }
             
             th, td {
-                padding: 3px 2px;
+                padding: 2px 1px; /* Slightly reduced but still more than before */
             }
             
             tbody .time-column {
-                min-width: 65px;
-                font-size: 0.5rem;
+                font-size: 0.45rem;
+                width: 48px; /* Increased from 45px to 48px */
             }
             
             th {
-                font-size: 0.5rem;
+                font-size: 0.45rem;
             }
             
             .note, .cycle-box, .even-tz-note {
-                font-size: 9px;
+                font-size: 8px;
             }
             
             .cycle-box strong, .cycle-box li {
-                font-size: 9px;
+                font-size: 8px;
             }
             
             .timezone-info label,
             .timezone-selector,
             .current-timezone {
-                font-size: 9px;
+                font-size: 8px;
+            }
+            
+            thead .time-column {
+                width: 48px; /* Increased from 45px to 48px */
             }
             
             /* Adjust row heights for smallest screens */
             .even-timezone-table tbody tr.half-hour-row {
-                height: 14px;
+                height: 18px !important;
             }
             
             .even-timezone-table tbody tr.two-hour-row {
-                height: 21px; /* 14px * 1.5 = 21px */
+                height: 25px !important;
             }
             
             table:not(.even-timezone-table) tbody tr {
-                height: 21px;
+                height: 25px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 6px;
+            }
+            
+            .schedule-container {
+                padding: 6px;
+            }
+            
+            h1 {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+            
+            table {
+                font-size: 6.5px;
+                margin: 8px 0;
+            }
+            
+            th, td {
+                padding: 1px 1px; /* Keep 1px horizontal padding */
+            }
+            
+            thead .time-column,
+            tbody .time-column {
+                width: 43px; /* Increased from 40px to 43px */
+                font-size: 0.4rem;
+            }
+            
+            th {
+                font-size: 0.4rem;
+            }
+            
+            .note, .cycle-box, .even-tz-note {
+                font-size: 7.5px;
+                padding: 4px;
+            }
+            
+            .cycle-box strong, .cycle-box li {
+                font-size: 7.5px;
+            }
+            
+            .timezone-info {
+                padding: 6px;
+            }
+            
+            .timezone-info label,
+            .timezone-selector,
+            .current-timezone {
+                font-size: 7.5px;
+            }
+            
+            .timezone-selector {
+                padding: 4px;
+            }
+            
+            /* Keep event names in one line */
+            td {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        @media (max-width: 360px) {
+            table {
+                font-size: 6px;
+            }
+            
+            thead .time-column,
+            tbody .time-column {
+                width: 41px; /* Increased from 38px to 41px */
+                font-size: 0.35rem;
+            }
+            
+            th {
+                font-size: 0.35rem;
+            }
+            
+            /* Reduce row heights for very small screens */
+            .even-timezone-table tbody tr.half-hour-row {
+                height: 16px !important;
+            }
+            
+            .even-timezone-table tbody tr.two-hour-row {
+                height: 22px !important;
+            }
+            
+            table:not(.even-timezone-table) tbody tr {
+                height: 22px !important;
+            }
+        }
+
+        @media (max-width: 320px) {
+            table {
+                font-size: 5.5px;
+            }
+            
+            thead .time-column,
+            tbody .time-column {
+                width: 38px; /* Increased from 35px to 38px */
             }
         }
     </style>
@@ -351,7 +469,7 @@
         <h1>TFD Axion Operational Area Rotation</h1>
         
         <div class="note">
-            <strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion. "AX Power Converter Station" is highlighted in red.
+            <strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for your selected timezone. "AX Power Converter Station" is highlighted in red.
         </div>
 
         <div class="timezone-info">
@@ -421,7 +539,7 @@
                 <li>AX Power Converter Station / First Crater</li>
                 <li>AX Refinery / Liquified AX Vault</li>
             </ol>
-            <p style="margin-top: 8px; color: #555; font-size: 11.2px;">
+            <p style="margin-top: 6px; color: #555; font-size: 10px;">
                 This pattern repeats every 14 hours (7 events × 2 hours each = 14 hours). 
                 Over 7 days (168 hours), the pattern repeats 12 times (168 ÷ 14 = 12).
             </p>
@@ -632,10 +750,10 @@
                 // Add row height classes for even timezones
                 if (isEven) {
                     if (timeSlotIndex === 0 || timeSlotIndex === timeSlots.length - 1) {
-                        // First and last rows are 1-hour slots (smaller)
+                        // First and last rows are 1-hour slots (25px)
                         row.classList.add('half-hour-row');
                     } else {
-                        // Middle rows are 2-hour slots (50% taller)
+                        // Middle rows are 2-hour slots (35px)
                         row.classList.add('two-hour-row');
                     }
                 }
