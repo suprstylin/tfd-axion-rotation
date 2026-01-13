@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFD Axion Operational Area Rotation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.3;
+            min-height: 100vh;
+            padding: 16px;
+            font-size: 13px;
+        }
+
+        .schedule-container {
+            background-color: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 1.6rem;
+        }
+
+        .note {
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 11.2px;
+        }
+
+        .even-tz-note {
+            background-color: #e8f5e9;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 11.2px;
+            display: none;
+        }
+
+        .timezone-info {
+            margin-bottom: 16px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .timezone-info label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 11.2px;
+        }
+
+        .timezone-selector {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 11.2px;
+            background-color: white;
+        }
+
+        .current-timezone {
+            display: block;
+            margin-top: 6px;
+            color: #666;
+            font-size: 11.2px;
+        }
+
+        .current-timezone strong {
+            color: #4a6fa5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #4a6fa5;
+            color: white;
+            font-weight: bold;
+            padding: 5px 4px;
+            text-align: center;
+            border: 1px solid #3a5a8a;
+            font-size: 0.63rem;
+            height: 32px;
+        }
+
+        td {
+            padding: 4px 3px;
+            text-align: center;
+            border: 1px solid #ddd;
+            min-width: 88px;
+            vertical-align: middle;
+        }
+
+        thead .time-column {
+            background-color: #4a6fa5;
+            color: white;
+            border: 1px solid #3a5a8a;
+        }
+
+        tbody .time-column {
+            background-color: #e8eaf6;
+            color: #000;
+            font-weight: bold;
+            min-width: 72px;
+            border: 1px solid #c5cae9;
+            font-size: 0.63rem;
+            padding: 4px 3px;
+        }
+
+        .axpower {
+            color: #d32f2f;
+            font-weight: bold;
+            background-color: #ffebee;
+        }
+
+        .half-event {
+            padding: 2px 3px;
+        }
+
+        .half-event.axpower {
+            background-color: #ffebee;
+        }
+
+        /* Even timezone specific styles */
+        .even-timezone-table tbody tr {
+            transition: height 0.3s ease;
+        }
+
+        /* Default height for 1-hour rows (smaller) */
+        .even-timezone-table tbody tr.half-hour-row {
+            height: 20px; /* Smaller 1-hour rows */
+        }
+
+        /* 2-hour rows are 50% bigger than 1-hour rows */
+        .even-timezone-table tbody tr.two-hour-row {
+            height: 30px; /* 20px * 1.5 = 30px */
+        }
+
+        /* For odd timezones, all rows are 2-hour and should match the height of even timezone 2-hour rows */
+        table:not(.even-timezone-table) tbody tr {
+            height: 30px; /* Same as even timezone 2-hour rows */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cycle-box {
+            background-color: #e3f2fd;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 12px 0;
+            font-size: 11.2px;
+        }
+
+        .cycle-box strong {
+            color: #333;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 11.2px;
+            font-weight: bold;
+        }
+
+        .cycle-box ol {
+            padding-left: 16px;
+            margin: 0;
+        }
+
+        .cycle-box li {
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 11.2px;
+            line-height: 1.3;
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 12px;
+            color: #666;
+            font-size: 0.75rem;
+            margin-top: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .schedule-container {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            table {
+                font-size: 9px;
+            }
+            
+            th, td {
+                padding: 4px 3px;
+            }
+            
+            th {
+                font-size: 0.56rem;
+            }
+            
+            thead .time-column,
+            tbody .time-column {
+                font-size: 0.56rem;
+            }
+            
+            /* Adjust row heights for smaller screens */
+            .even-timezone-table tbody tr.half-hour-row {
+                height: 18px;
+            }
+            
+            .even-timezone-table tbody tr.two-hour-row {
+                height: 27px; /* 18px * 1.5 = 27px */
+            }
+            
+            table:not(.even-timezone-table) tbody tr {
+                height: 27px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            
+            .schedule-container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.28rem;
+            }
+            
+            table {
+                font-size: 9px;
+                margin: 16px 0;
+            }
+            
+            .note, .cycle-box, .even-tz-note {
+                font-size: 10px;
+            }
+            
+            .cycle-box strong, .cycle-box li {
+                font-size: 10px;
+            }
+            
+            .timezone-info label,
+            .timezone-selector,
+            .current-timezone {
+                font-size: 10px;
+            }
+            
+            /* Adjust row heights for mobile */
+            .even-timezone-table tbody tr.half-hour-row {
+                height: 16px;
+            }
+            
+            .even-timezone-table tbody tr.two-hour-row {
+                height: 24px; /* 16px * 1.5 = 24px */
+            }
+            
+            table:not(.even-timezone-table) tbody tr {
+                height: 24px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            table {
+                font-size: 8px;
+                margin: 12px 0;
+            }
+            
+            th, td {
+                padding: 3px 2px;
+            }
+            
+            tbody .time-column {
+                min-width: 65px;
+                font-size: 0.5rem;
+            }
+            
+            th {
+                font-size: 0.5rem;
+            }
+            
+            .note, .cycle-box, .even-tz-note {
+                font-size: 9px;
+            }
+            
+            .cycle-box strong, .cycle-box li {
+                font-size: 9px;
+            }
+            
+            .timezone-info label,
+            .timezone-selector,
+            .current-timezone {
+                font-size: 9px;
+            }
+            
+            /* Adjust row heights for smallest screens */
+            .even-timezone-table tbody tr.half-hour-row {
+                height: 14px;
+            }
+            
+            .even-timezone-table tbody tr.two-hour-row {
+                height: 21px; /* 14px * 1.5 = 21px */
+            }
+            
+            table:not(.even-timezone-table) tbody tr {
+                height: 21px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="schedule-container">
+        <h1>TFD Axion Operational Area Rotation</h1>
+        
+        <div class="note">
+            <strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion. "AX Power Converter Station" is highlighted in red.
+        </div>
+
+        <div class="timezone-info">
+            <label><i class="fas fa-globe-americas"></i> Select Your Timezone</label>
+            <select id="timezone-selector" class="timezone-selector">
+                <option value="-12">GMT-12 (Baker Island)</option>
+                <option value="-11">GMT-11 (Samoa)</option>
+                <option value="-10">GMT-10 (Hawaii)</option>
+                <option value="-9">GMT-9 (Alaska)</option>
+                <option value="-8">GMT-8 (Pacific Time)</option>
+                <option value="-7">GMT-7 (Mountain Time)</option>
+                <option value="-6">GMT-6 (Central Time)</option>
+                <option value="-5">GMT-5 (Eastern Time)</option>
+                <option value="-4">GMT-4 (Atlantic Time)</option>
+                <option value="-3">GMT-3 (Argentina, Brazil)</option>
+                <option value="-2">GMT-2 (South Georgia)</option>
+                <option value="-1">GMT-1 (Azores)</option>
+                <option value="0">GMT+0 (UTC, London)</option>
+                <option value="1">GMT+1 (Central European Time)</option>
+                <option value="2">GMT+2 (Eastern European Time)</option>
+                <option value="3">GMT+3 (Moscow, East Africa)</option>
+                <option value="4">GMT+4 (UAE, Azerbaijan)</option>
+                <option value="5">GMT+5 (Pakistan)</option>
+                <option value="6">GMT+6 (Bangladesh, Bhutan)</option>
+                <option value="7">GMT+7 (Bangkok, Jakarta)</option>
+                <option value="8">GMT+8 (China, Singapore)</option>
+                <option value="9">GMT+9 (Japan, Korea)</option>
+                <option value="10">GMT+10 (Australia East)</option>
+                <option value="11">GMT+11 (Solomon Islands)</option>
+                <option value="12">GMT+12 (New Zealand)</option>
+                <option value="13">GMT+13 (Tonga)</option>
+                <option value="14">GMT+14 (Line Islands)</option>
+            </select>
+            <span class="current-timezone">Schedule displayed in: <strong id="current-tz-display">Detecting your timezone...</strong></span>
+        </div>
+
+        <div class="even-tz-note" id="even-tz-note">
+            <strong>Note for Even Timezones (GMT±0, ±2, ±4, etc.):</strong> Events change every 2 hours. Each day starts with the second half of the previous day's 23:00-01:00 event, and ends with the first half of the next day's event.
+        </div>
+
+        <table id="schedule-table">
+            <thead>
+                <tr>
+                    <th class="time-column">Local Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                    <th>Sunday</th>
+                </tr>
+            </thead>
+            <tbody id="schedule-body">
+                <!-- JavaScript will populate this -->
+            </tbody>
+        </table>
+
+        <div class="cycle-box">
+            <strong>Event Cycle Order (7 events, repeated 12 times = 84 total cycles):</strong>
+            <ol>
+                <li>AX Power Converter Station / Technical Research Institute</li>
+                <li>Sealed Resident District / AX Refinery</li>
+                <li>Emergency Deployment Zone / Technical Research Institute</li>
+                <li>First Crater / Sealed Resident District</li>
+                <li>Liquified AX Vault / Emergency Deployment Zone</li>
+                <li>AX Power Converter Station / First Crater</li>
+                <li>AX Refinery / Liquified AX Vault</li>
+            </ol>
+            <p style="margin-top: 8px; color: #555; font-size: 11.2px;">
+                This pattern repeats every 14 hours (7 events × 2 hours each = 14 hours). 
+                Over 7 days (168 hours), the pattern repeats 12 times (168 ÷ 14 = 12).
+            </p>
+        </div>
+
+        <footer class="page-footer">
+            <p>TFD Axion Operational Area Rotation | Unofficial Fan Resource | Data sourced from game events</p>
+            <p>This site is not affiliated with NEXON Korea Corp. or The First Descendant.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Event data
+        const fullMissions = {
+            'AX_Power': 'AX Power Converter Station',
+            'TRI': 'Technical Research Institute',
+            'EDZ': 'Emergency Deployment Zone',
+            'AX_Vault': 'Liquified AX Vault',
+            'Crater': 'First Crater',
+            'AX_Refinery': 'AX Refinery',
+            'SRD': 'Sealed Resident District'
+        };
+
+        const displayNames = {
+            'AX_Power': 'AX Power',
+            'TRI': 'TRI',
+            'EDZ': 'EDZ',
+            'AX_Vault': 'AX Vault',
+            'Crater': 'Crater',
+            'AX_Refinery': 'AX Refinery',
+            'SRD': 'SRD'
+        };
+
+        // Basic 7-event cycle
+        const baseEventOrder = [
+            'AX_Power/TRI',          // Event 1
+            'SRD/AX_Refinery',       // Event 2
+            'EDZ/TRI',               // Event 3
+            'Crater/SRD',            // Event 4
+            'AX_Vault/EDZ',          // Event 5
+            'AX_Power/Crater',       // Event 6
+            'AX_Refinery/AX_Vault'   // Event 7
+        ];
+
+        // Create 84-event cycle by repeating the base 7 events 12 times
+        const eventOrder84 = [];
+        for (let i = 0; i < 12; i++) {
+            eventOrder84.push(...baseEventOrder);
+        }
+
+        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        // Timezone display names
+        const timezoneNames = {
+            '-12': 'GMT-12 (Baker Island)',
+            '-11': 'GMT-11 (Samoa)',
+            '-10': 'GMT-10 (Hawaii)',
+            '-9': 'GMT-9 (Alaska)',
+            '-8': 'GMT-8 (Pacific Time)',
+            '-7': 'GMT-7 (Mountain Time)',
+            '-6': 'GMT-6 (Central Time)',
+            '-5': 'GMT-5 (Eastern Time)',
+            '-4': 'GMT-4 (Atlantic Time)',
+            '-3': 'GMT-3 (Argentina, Brazil)',
+            '-2': 'GMT-2 (South Georgia)',
+            '-1': 'GMT-1 (Azores)',
+            '0': 'GMT+0 (UTC, London)',
+            '1': 'GMT+1 (Central European Time)',
+            '2': 'GMT+2 (Eastern European Time)',
+            '3': 'GMT+3 (Moscow, East Africa)',
+            '4': 'GMT+4 (UAE, Azerbaijan)',
+            '5': 'GMT+5 (Pakistan)',
+            '6': 'GMT+6 (Bangladesh, Bhutan)',
+            '7': 'GMT+7 (Bangkok, Jakarta)',
+            '8': 'GMT+8 (China, Singapore)',
+            '9': 'GMT+9 (Japan, Korea)',
+            '10': 'GMT+10 (Australia East)',
+            '11': 'GMT+11 (Solomon Islands)',
+            '12': 'GMT+12 (New Zealand)',
+            '13': 'GMT+13 (Tonga)',
+            '14': 'GMT+14 (Line Islands)'
+        };
+
+        // Check if event involves AX Power
+        function isAXPowerEvent(eventStr) {
+            return eventStr.includes('AX_Power');
+        }
+
+        // Check if timezone is even
+        function isEvenTimezone(timezoneOffset) {
+            return timezoneOffset % 2 === 0;
+        }
+
+        // Get time slots for even timezones (13 rows: 00:00-01:00, then 01:00-03:00, 03:00-05:00, ..., 21:00-23:00, 23:00-00:00)
+        function getTimeSlotsEven() {
+            const timeSlots = [];
+            
+            // First row: 00:00-01:00
+            timeSlots.push('00:00-01:00');
+            
+            // Middle 11 rows: 2-hour slots from 01:00 to 23:00
+            for (let i = 0; i < 11; i++) {
+                let hour1 = 1 + (2 * i);
+                let hour2 = hour1 + 2;
+                
+                const hour1Str = hour1.toString().padStart(2, '0');
+                const hour2Str = hour2.toString().padStart(2, '0');
+                
+                timeSlots.push(`${hour1Str}:00-${hour2Str}:00`);
+            }
+            
+            // Last row: 23:00-00:00
+            timeSlots.push('23:00-00:00');
+            
+            return timeSlots;
+        }
+
+        // Get time slots for odd timezones (12 rows: 00:00-02:00, 02:00-04:00, ..., 22:00-00:00)
+        function getTimeSlotsOdd() {
+            const timeSlots = [];
+            
+            for (let i = 0; i < 12; i++) {
+                let hour1 = 2 * i;
+                let hour2 = (hour1 + 2) % 24;
+                
+                const hour1Str = hour1.toString().padStart(2, '0');
+                const hour2Str = hour2.toString().padStart(2, '0');
+                
+                timeSlots.push(`${hour1Str}:00-${hour2Str}:00`);
+            }
+            
+            return timeSlots;
+        }
+
+        // Toggle even timezone note visibility and table class
+        function toggleEvenTimezoneNote(timezoneOffset) {
+            const noteElement = document.getElementById('even-tz-note');
+            const table = document.getElementById('schedule-table');
+            
+            if (isEvenTimezone(timezoneOffset)) {
+                noteElement.style.display = 'block';
+                table.classList.add('even-timezone-table');
+            } else {
+                noteElement.style.display = 'none';
+                table.classList.remove('even-timezone-table');
+            }
+        }
+
+        // Calculate event for a specific time slot and day
+        function calculateEventForTimeSlot(dayIndex, timeSlotIndex, timezoneOffset, isHalfSlot, isFirstHalf) {
+            const isEven = isEvenTimezone(timezoneOffset);
+            
+            // Calculate how many hours to shift based on timezone difference from GMT+1 (our reference point)
+            const hoursFromGMT1 = timezoneOffset - 1;
+            
+            // Calculate how many 2-hour slots to shift
+            const slotShift = Math.floor(hoursFromGMT1 / 2);
+            
+            let totalSlots;
+            
+            if (isEven) {
+                if (isHalfSlot) {
+                    if (isFirstHalf) {
+                        // First row (00:00-01:00): second half of the event from previous day 23:00-01:00
+                        // This is the event that started at 23:00 on the previous day
+                        // For Monday (dayIndex 0), this is Sunday's last event which would be at slot 83
+                        totalSlots = ((dayIndex - 1) * 12 + 11) % 84;
+                        if (dayIndex === 0) {
+                            totalSlots = 83; // Sunday's last full event (slot 11 of day 6)
+                        }
+                    } else {
+                        // Last row (23:00-00:00): first half of the event that spans to next day
+                        // This event starts at 23:00 and goes until 01:00 next day
+                        totalSlots = (dayIndex * 12) + 11;
+                    }
+                } else {
+                    // Regular 2-hour slots (timeSlotIndex 1-11 maps to slots 0-10 of the day)
+                    totalSlots = (dayIndex * 12) + (timeSlotIndex - 1);
+                }
+            } else {
+                // For odd timezones, straightforward calculation
+                totalSlots = (dayIndex * 12) + timeSlotIndex;
+            }
+            
+            // Apply the timezone shift and handle modulo
+            const adjustedSlots = ((totalSlots - slotShift) % 84 + 84) % 84;
+            
+            // Get event from the 84-event cycle array
+            const eventKey = eventOrder84[adjustedSlots];
+            
+            return {
+                eventKey: eventKey,
+                isHalfSlot: isHalfSlot
+            };
+        }
+
+        // Generate the schedule table
+        function generateSchedule(timezoneOffset) {
+            const tbody = document.getElementById('schedule-body');
+            tbody.innerHTML = '';
+            
+            const isEven = isEvenTimezone(timezoneOffset);
+            const timeSlots = isEven ? getTimeSlotsEven() : getTimeSlotsOdd();
+            
+            timeSlots.forEach((timeSlot, timeSlotIndex) => {
+                const row = document.createElement('tr');
+                
+                // Add row height classes for even timezones
+                if (isEven) {
+                    if (timeSlotIndex === 0 || timeSlotIndex === timeSlots.length - 1) {
+                        // First and last rows are 1-hour slots (smaller)
+                        row.classList.add('half-hour-row');
+                    } else {
+                        // Middle rows are 2-hour slots (50% taller)
+                        row.classList.add('two-hour-row');
+                    }
+                }
+                
+                const timeCell = document.createElement('td');
+                timeCell.className = 'time-column';
+                timeCell.textContent = timeSlot;
+                row.appendChild(timeCell);
+                
+                daysOfWeek.forEach((day, dayIndex) => {
+                    const cell = document.createElement('td');
+                    
+                    let isHalfSlot = false;
+                    let isFirstHalf = false;
+                    
+                    if (isEven) {
+                        if (timeSlotIndex === 0) {
+                            isHalfSlot = true;
+                            isFirstHalf = true; // 00:00-01:00 is second half
+                        } else if (timeSlotIndex === timeSlots.length - 1) {
+                            isHalfSlot = true;
+                            isFirstHalf = false; // 23:00-00:00 is first half
+                        }
+                    }
+                    
+                    const result = calculateEventForTimeSlot(dayIndex, timeSlotIndex, timezoneOffset, isHalfSlot, isFirstHalf);
+                    const eventKey = result.eventKey;
+                    
+                    if (eventKey) {
+                        const parts = eventKey.split('/');
+                        const displayName1 = displayNames[parts[0].trim()] || parts[0].trim();
+                        const displayName2 = displayNames[parts[1].trim()] || parts[1].trim();
+                        
+                        cell.textContent = `${displayName1} / ${displayName2}`;
+                        
+                        if (isAXPowerEvent(eventKey)) {
+                            cell.classList.add('axpower');
+                        }
+                        
+                        if (result.isHalfSlot) {
+                            cell.classList.add('half-event');
+                        }
+                        
+                        const fullNames = parts.map(part => {
+                            const key = part.trim();
+                            return fullMissions[key] || key;
+                        }).join(' / ');
+                        cell.title = fullNames;
+                    } else {
+                        cell.textContent = '-';
+                        cell.style.color = '#cccccc';
+                        cell.style.fontStyle = 'italic';
+                    }
+                    
+                    row.appendChild(cell);
+                });
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Detect user's timezone offset
+        function detectUserTimezone() {
+            const now = new Date();
+            const timezoneOffset = now.getTimezoneOffset();
+            const offsetHours = -timezoneOffset / 60;
+            let roundedOffset = Math.round(offsetHours);
+            
+            if (roundedOffset < -12) roundedOffset = -12;
+            if (roundedOffset > 14) roundedOffset = 14;
+            
+            return roundedOffset;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            const selector = document.getElementById('timezone-selector');
+            const display = document.getElementById('current-tz-display');
+            
+            const userOffset = detectUserTimezone();
+            selector.value = userOffset;
+            
+            generateSchedule(userOffset);
+            display.textContent = timezoneNames[userOffset];
+            toggleEvenTimezoneNote(userOffset);
+            
+            selector.addEventListener('change', function() {
+                const offset = parseInt(this.value);
+                generateSchedule(offset);
+                display.textContent = timezoneNames[this.value];
+                toggleEvenTimezoneNote(offset);
+            });
+        });
+    </script>
+</body>
+</html>
