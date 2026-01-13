@@ -383,6 +383,11 @@
             table:not(.even-timezone-table) tbody tr {
                 height: 31px !important;
             }
+            
+            /* Footer text size adjustment for mobile */
+            .page-footer {
+                font-size: 10px; /* Match the blue box text size */
+            }
         }
 
         @media (max-width: 768px) {
@@ -440,6 +445,11 @@
             
             table:not(.even-timezone-table) tbody tr {
                 height: 28px !important;
+            }
+            
+            /* Footer text size adjustment for mobile */
+            .page-footer {
+                font-size: 9px; /* Match the blue box text size */
             }
         }
 
@@ -513,6 +523,11 @@
             table:not(.even-timezone-table) tbody tr {
                 height: 25px !important;
             }
+            
+            /* Footer text size adjustment for mobile */
+            .page-footer {
+                font-size: 8px; /* Match the blue box text size */
+            }
         }
 
         @media (max-width: 480px) {
@@ -583,6 +598,12 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
+            
+            /* Footer text size adjustment for mobile */
+            .page-footer {
+                font-size: 7.5px; /* Match the blue box text size */
+                padding: 6px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -622,6 +643,11 @@
             table:not(.even-timezone-table) tbody tr {
                 height: 22px !important;
             }
+            
+            /* Footer text size adjustment for mobile */
+            .page-footer {
+                font-size: 7.5px; /* Match the blue box text size */
+            }
         }
 
         @media (max-width: 320px) {
@@ -642,6 +668,11 @@
             .export-link {
                 align-self: flex-start;
                 margin-top: 4px;
+            }
+            
+            /* Footer text size adjustment for mobile */
+            .page-footer {
+                font-size: 7px; /* Match the blue box text size */
             }
         }
     </style>
@@ -727,10 +758,6 @@
                 <li>AX Power Converter Station / First Crater</li>
                 <li>AX Refinery / Liquified AX Vault</li>
             </ol>
-            <p style="margin-top: 6px; color: #555; font-size: 10px;">
-                This pattern repeats every 14 hours (7 events × 2 hours each = 14 hours). 
-                Over 7 days (168 hours), the pattern repeats 12 times (168 ÷ 14 = 12).
-            </p>
         </div>
 
         <footer class="page-footer">
@@ -1098,7 +1125,7 @@
             return screenshotContainer;
         }
 
-        // Export table as image
+        // Export table as image - FIXED FOR MOBILE
         function exportTableAsImage(event) {
             event.preventDefault(); // Prevent link from navigating
             
@@ -1106,25 +1133,49 @@
             const screenshotContainer = createScreenshotContent(currentTimezoneName);
             const overlay = document.getElementById('export-overlay');
             
+            // Get the actual rendered table height from the visible page
+            const visibleTable = document.getElementById('schedule-table');
+            const tableHeight = visibleTable.offsetHeight;
+            const tableRows = visibleTable.querySelectorAll('tbody tr').length;
+            
+            // Calculate approximate height needed for the screenshot
+            // For mobile, we need to ensure the container is tall enough
+            const estimatedRowHeight = tableRows > 0 ? tableHeight / tableRows : 35;
+            const estimatedTotalHeight = estimatedRowHeight * tableRows + 150; // Add extra for header and notes
+            
+            // Set a minimum height to ensure all content is captured
+            screenshotContainer.style.minHeight = `${Math.max(estimatedTotalHeight, 800)}px`;
+            
             // Show loading overlay
             overlay.style.display = 'flex';
             
-            // Use html2canvas to capture the screenshot container with minimal white space
+            // Use html2canvas to capture the screenshot container
             html2canvas(screenshotContainer, {
-                scale: 2, // Higher scale for better quality
+                scale: 3, // Higher scale for better quality on mobile
                 backgroundColor: '#ffffff',
                 useCORS: true,
                 logging: false,
                 width: screenshotContainer.offsetWidth,
-                height: screenshotContainer.scrollHeight, // Use scrollHeight to capture exactly what's needed
+                height: screenshotContainer.scrollHeight,
                 windowWidth: screenshotContainer.scrollWidth,
                 windowHeight: screenshotContainer.scrollHeight,
                 onclone: function(clonedDoc) {
                     // Ensure minimal white space in the cloned version
                     const clonedContainer = clonedDoc.getElementById('screenshot-container');
                     if (clonedContainer) {
-                        clonedContainer.style.padding = '12px 10px 1px 10px';
-                        clonedContainer.style.boxShadow = 'none';
+                        // Remove any height restrictions
+                        clonedContainer.style.height = 'auto';
+                        clonedContainer.style.minHeight = `${estimatedTotalHeight}px`;
+                        
+                        // Ensure all rows are visible
+                        const clonedTable = clonedContainer.querySelector('table');
+                        if (clonedTable) {
+                            const clonedRows = clonedTable.querySelectorAll('tbody tr');
+                            clonedRows.forEach(row => {
+                                row.style.height = 'auto';
+                                row.style.minHeight = '25px';
+                            });
+                        }
                     }
                 }
             }).then(canvas => {
@@ -1141,6 +1192,7 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
+                screenshotContainer.style.minHeight = '';
             }).catch(error => {
                 console.error('Error generating image:', error);
                 alert('Failed to generate image. Please try again.');
@@ -1148,6 +1200,7 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
+                screenshotContainer.style.minHeight = '';
             });
         }
 
