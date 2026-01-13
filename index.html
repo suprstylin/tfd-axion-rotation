@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" id="viewport-meta" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TFD Axion Operational Area Rotation</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,7 +36,7 @@
         h1 {
             color: #333;
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 12px; /* Reduced from 22px by 10px */
             font-size: 1.2rem;
         }
 
@@ -300,7 +300,7 @@
             top: -9999px;
             width: 800px;
             background-color: white;
-            padding: 12px 10px 1px 10px;
+            padding: 12px 10px 1px 10px; /* Increased top padding from 2px to 12px */
             border-radius: 0;
             box-shadow: 0 0 0 rgba(0,0,0,0);
         }
@@ -308,8 +308,8 @@
         .screenshot-title {
             color: #333;
             text-align: center;
-            margin-bottom: 12px;
-            font-size: 1.2rem;
+            margin-bottom: 12px; /* Same as website: 12px */
+            font-size: 1.2rem; /* Same as website: 1.2rem */
             font-weight: bold;
         }
 
@@ -317,7 +317,7 @@
             background-color: #e3f2fd;
             padding: 6px;
             border-radius: 3px;
-            margin-bottom: 8px;
+            margin-bottom: 8px; /* Same as website: 8px */
             font-size: 10px;
         }
 
@@ -345,12 +345,12 @@
             
             h1 {
                 font-size: 1.1rem;
-                margin-bottom: 10px;
+                margin-bottom: 10px; /* Adjusted */
             }
             
             .screenshot-title {
                 font-size: 1.1rem;
-                margin-bottom: 10px;
+                margin-bottom: 10px; /* Adjusted */
             }
             
             table {
@@ -396,12 +396,12 @@
             
             h1 {
                 font-size: 1.0rem;
-                margin-bottom: 8px;
+                margin-bottom: 8px; /* Adjusted */
             }
             
             .screenshot-title {
                 font-size: 1.0rem;
-                margin-bottom: 8px;
+                margin-bottom: 8px; /* Adjusted */
             }
             
             table {
@@ -424,9 +424,8 @@
                 font-size: 9px;
             }
             
-            /* Mobile footer font size matches top blue box (note) */
             .page-footer {
-                font-size: 9px !important;
+                font-size: 9px; /* Match the top blue box font size */
             }
             
             thead .time-column,
@@ -456,12 +455,12 @@
             
             h1 {
                 font-size: 0.9rem;
-                margin-bottom: 6px;
+                margin-bottom: 6px; /* Adjusted */
             }
             
             .screenshot-title {
                 font-size: 0.9rem;
-                margin-bottom: 6px;
+                margin-bottom: 6px; /* Adjusted */
             }
             
             th, td {
@@ -492,9 +491,8 @@
                 font-size: 8px;
             }
             
-            /* Mobile footer font size matches top blue box (note) */
             .page-footer {
-                font-size: 8px !important;
+                font-size: 8px; /* Match the top blue box font size */
             }
             
             .timezone-display-row {
@@ -536,12 +534,12 @@
             
             h1 {
                 font-size: 0.85rem;
-                margin-bottom: 4px;
+                margin-bottom: 4px; /* Adjusted */
             }
             
             .screenshot-title {
                 font-size: 0.85rem;
-                margin-bottom: 4px;
+                margin-bottom: 4px; /* Adjusted */
             }
             
             table {
@@ -583,9 +581,8 @@
                 font-size: 7.5px;
             }
             
-            /* Mobile footer font size matches top blue box (note) */
             .page-footer {
-                font-size: 7.5px !important;
+                font-size: 7.5px; /* Match the top blue box font size */
             }
             
             .timezone-selector {
@@ -607,12 +604,12 @@
             
             h1 {
                 font-size: 0.8rem;
-                margin-bottom: 2px;
+                margin-bottom: 2px; /* Adjusted */
             }
             
             .screenshot-title {
                 font-size: 0.8rem;
-                margin-bottom: 2px;
+                margin-bottom: 2px; /* Adjusted */
             }
             
             thead .time-column,
@@ -625,9 +622,8 @@
                 font-size: 0.35rem;
             }
             
-            /* Mobile footer font size matches top blue box (note) */
             .page-footer {
-                font-size: 7px !important;
+                font-size: 7px; /* Match the top blue box font size */
             }
             
             /* Reduce row heights for very small screens */
@@ -664,9 +660,8 @@
                 margin-top: 4px;
             }
             
-            /* Mobile footer font size matches top blue box (note) */
             .page-footer {
-                font-size: 6.5px !important;
+                font-size: 6.5px; /* Match the top blue box font size */
             }
         }
     </style>
@@ -1069,32 +1064,20 @@
             return roundedOffset;
         }
 
-        // Adjust viewport for mobile devices
-        function adjustViewportForMobile() {
-            const viewportMeta = document.getElementById('viewport-meta');
-            const isMobile = window.innerWidth <= 768;
-            
-            if (isMobile) {
-                // Check if portrait or landscape
-                const isPortrait = window.innerHeight > window.innerWidth;
-                
-                if (isPortrait) {
-                    // Portrait mode: 50% zoom
-                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=5.0, user-scalable=yes');
-                } else {
-                    // Landscape mode: 100% zoom
-                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-                }
-            } else {
-                // Desktop: normal zoom
-                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
-            }
-        }
-
         // Create screenshot content with minimal white space
         function createScreenshotContent(currentTimezoneName) {
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
+            
+            // Determine if we're on mobile
+            const isMobile = window.innerWidth <= 768;
+            
+            // Set container dimensions based on device
+            if (isMobile) {
+                screenshotContainer.style.width = '1200px'; // For 2400px final output with scale: 2
+            } else {
+                screenshotContainer.style.width = '800px'; // For 1600px final output with scale: 2
+            }
             
             // Create title
             const title = document.createElement('h1');
@@ -1110,9 +1093,9 @@
             
             // Clone the table
             const table = document.getElementById('schedule-table').cloneNode(true);
-            table.style.margin = '0';
+            table.style.margin = '0'; // No margins
             table.style.width = '100%';
-            table.style.borderBottom = '1px solid #e0e0e0';
+            table.style.borderBottom = '1px solid #e0e0e0'; // Ensure bottom border
             
             // Remove bottom margin from the last row
             const lastRow = table.querySelector('tbody tr:last-child');
@@ -1141,7 +1124,7 @@
             return screenshotContainer;
         }
 
-        // Export table as image with optimized dimensions for mobile
+        // Export table as image
         function exportTableAsImage(event) {
             event.preventDefault(); // Prevent link from navigating
             
@@ -1152,34 +1135,14 @@
             // Show loading overlay
             overlay.style.display = 'flex';
             
-            // Set optimized dimensions for mobile vs desktop
+            // Determine if we're on mobile and set appropriate dimensions
             const isMobile = window.innerWidth <= 768;
-            let targetWidth, targetHeight, scale;
+            const targetWidth = isMobile ? 2400 : 1600;
+            const targetHeight = isMobile ? 1450 : 1000;
             
-            if (isMobile) {
-                const isPortrait = window.innerHeight > window.innerWidth;
-                
-                if (isPortrait) {
-                    // Portrait mode: 2400x1450
-                    targetWidth = 2400;
-                    targetHeight = 1450;
-                    scale = 3; // Higher scale for better quality on high-res displays
-                } else {
-                    // Landscape mode: 1600x1000
-                    targetWidth = 1600;
-                    targetHeight = 1000;
-                    scale = 2;
-                }
-            } else {
-                // Desktop: maintain original scaling
-                targetWidth = screenshotContainer.offsetWidth;
-                targetHeight = screenshotContainer.scrollHeight;
-                scale = 2;
-            }
-            
-            // Set container dimensions for capture
-            screenshotContainer.style.width = '800px';
-            screenshotContainer.style.overflow = 'hidden';
+            // Calculate scale based on container width and target width
+            const containerWidth = parseInt(screenshotContainer.style.width);
+            const scale = targetWidth / containerWidth;
             
             // Use html2canvas to capture the screenshot container
             html2canvas(screenshotContainer, {
@@ -1187,10 +1150,10 @@
                 backgroundColor: '#ffffff',
                 useCORS: true,
                 logging: false,
-                width: 800,
-                height: screenshotContainer.scrollHeight,
-                windowWidth: 800,
-                windowHeight: screenshotContainer.scrollHeight,
+                width: containerWidth,
+                height: targetHeight / scale, // Calculate container height needed for target output
+                windowWidth: containerWidth,
+                windowHeight: targetHeight / scale,
                 onclone: function(clonedDoc) {
                     // Ensure minimal white space in the cloned version
                     const clonedContainer = clonedDoc.getElementById('screenshot-container');
@@ -1200,33 +1163,6 @@
                     }
                 }
             }).then(canvas => {
-                // Resize canvas to target dimensions if needed
-                if (isMobile) {
-                    const resizedCanvas = document.createElement('canvas');
-                    resizedCanvas.width = targetWidth;
-                    resizedCanvas.height = targetHeight;
-                    const ctx = resizedCanvas.getContext('2d');
-                    
-                    // Fill background with white
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(0, 0, targetWidth, targetHeight);
-                    
-                    // Calculate scaling to fit content
-                    const scaleX = targetWidth / canvas.width;
-                    const scaleY = targetHeight / canvas.height;
-                    const scaleFactor = Math.min(scaleX, scaleY);
-                    
-                    // Calculate position to center the image
-                    const x = (targetWidth - canvas.width * scaleFactor) / 2;
-                    const y = (targetHeight - canvas.height * scaleFactor) / 2;
-                    
-                    // Draw the canvas onto the resized canvas
-                    ctx.drawImage(canvas, x, y, canvas.width * scaleFactor, canvas.height * scaleFactor);
-                    
-                    // Use resized canvas for download
-                    canvas = resizedCanvas;
-                }
-                
                 // Create download link
                 const link = document.createElement('a');
                 const dateStr = new Date().toISOString().slice(0,10);
@@ -1240,6 +1176,7 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
+                screenshotContainer.style.width = '800px'; // Reset to default
             }).catch(error => {
                 console.error('Error generating image:', error);
                 alert('Failed to generate image. Please try again.');
@@ -1247,6 +1184,7 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
+                screenshotContainer.style.width = '800px'; // Reset to default
             });
         }
 
@@ -1263,10 +1201,6 @@
             display.textContent = timezoneNames[userOffset];
             toggleEvenTimezoneNote(userOffset);
             
-            // Set initial viewport for mobile
-            adjustViewportForMobile();
-            
-            // Add event listeners
             selector.addEventListener('change', function() {
                 const offset = parseInt(this.value);
                 generateSchedule(offset);
@@ -1274,14 +1208,8 @@
                 toggleEvenTimezoneNote(offset);
             });
             
+            // Add event listener for export link
             exportLink.addEventListener('click', exportTableAsImage);
-            
-            // Adjust viewport on resize/orientation change
-            window.addEventListener('resize', adjustViewportForMobile);
-            window.addEventListener('orientationchange', function() {
-                // Small delay to ensure orientation change is complete
-                setTimeout(adjustViewportForMobile, 100);
-            });
         });
     </script>
 </body>
