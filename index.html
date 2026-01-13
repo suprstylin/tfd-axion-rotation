@@ -303,6 +303,48 @@
             padding: 12px 10px 1px 10px; /* Increased top padding from 2px to 12px */
             border-radius: 0;
             box-shadow: 0 0 0 rgba(0,0,0,0);
+            /* Force desktop styles for screenshot */
+            font-size: 11px !important;
+        }
+
+        /* Force desktop styling in screenshot container */
+        #screenshot-container table {
+            font-size: 8.5px !important;
+            border-collapse: collapse !important;
+            margin: 14px 0 !important;
+            border: 1px solid #e0e0e0 !important;
+            table-layout: fixed !important;
+            width: 100% !important;
+        }
+
+        #screenshot-container th {
+            font-size: 0.55rem !important;
+            padding: 3px 2px !important;
+            height: 24px !important;
+        }
+
+        #screenshot-container td {
+            padding: 2px 2px !important;
+            font-size: 8.5px !important;
+        }
+
+        #screenshot-container thead .time-column,
+        #screenshot-container tbody .time-column {
+            font-size: 0.55rem !important;
+            width: 63px !important;
+        }
+
+        /* Force desktop row heights */
+        #screenshot-container .even-timezone-table tbody tr.half-hour-row {
+            height: 25px !important;
+        }
+        
+        #screenshot-container .even-timezone-table tbody tr.two-hour-row {
+            height: 35px !important;
+        }
+        
+        #screenshot-container table:not(.even-timezone-table) tbody tr {
+            height: 35px !important;
         }
 
         .screenshot-title {
@@ -344,11 +386,6 @@
             }
             
             h1 {
-                font-size: 1.1rem;
-                margin-bottom: 10px; /* Adjusted */
-            }
-            
-            .screenshot-title {
                 font-size: 1.1rem;
                 margin-bottom: 10px; /* Adjusted */
             }
@@ -395,11 +432,6 @@
             }
             
             h1 {
-                font-size: 1.0rem;
-                margin-bottom: 8px; /* Adjusted */
-            }
-            
-            .screenshot-title {
                 font-size: 1.0rem;
                 margin-bottom: 8px; /* Adjusted */
             }
@@ -454,11 +486,6 @@
             }
             
             h1 {
-                font-size: 0.9rem;
-                margin-bottom: 6px; /* Adjusted */
-            }
-            
-            .screenshot-title {
                 font-size: 0.9rem;
                 margin-bottom: 6px; /* Adjusted */
             }
@@ -537,11 +564,6 @@
                 margin-bottom: 4px; /* Adjusted */
             }
             
-            .screenshot-title {
-                font-size: 0.85rem;
-                margin-bottom: 4px; /* Adjusted */
-            }
-            
             table {
                 font-size: 6.5px;
                 margin: 8px 0;
@@ -603,11 +625,6 @@
             }
             
             h1 {
-                font-size: 0.8rem;
-                margin-bottom: 2px; /* Adjusted */
-            }
-            
-            .screenshot-title {
                 font-size: 0.8rem;
                 margin-bottom: 2px; /* Adjusted */
             }
@@ -1064,31 +1081,13 @@
             return roundedOffset;
         }
 
-        // Create screenshot content with minimal white space
+        // Create screenshot content - always use desktop dimensions
         function createScreenshotContent(currentTimezoneName) {
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
             
-            // Determine if we're on mobile (portrait mode)
-            const isMobilePortrait = window.innerWidth <= 768;
-            
-            // For mobile devices, we'll use landscape orientation for the screenshot
-            // by rotating the container 90 degrees and adjusting dimensions
-            const isMobile = window.innerWidth <= 768;
-            
-            if (isMobile) {
-                // For mobile landscape export, we'll use a wider container
-                screenshotContainer.style.width = '1450px'; // Height becomes width in landscape
-                screenshotContainer.style.transform = 'rotate(90deg)';
-                screenshotContainer.style.transformOrigin = 'top left';
-                screenshotContainer.style.position = 'absolute';
-                screenshotContainer.style.left = '0';
-                screenshotContainer.style.top = '0';
-            } else {
-                screenshotContainer.style.width = '800px';
-                screenshotContainer.style.transform = 'none';
-                screenshotContainer.style.position = 'absolute';
-            }
+            // ALWAYS use desktop width (800px) for consistent image generation
+            screenshotContainer.style.width = '800px';
             
             // Create title
             const title = document.createElement('h1');
@@ -1104,22 +1103,9 @@
             
             // Clone the table
             const table = document.getElementById('schedule-table').cloneNode(true);
-            table.style.margin = '0'; // No margins
+            table.style.margin = '0';
             table.style.width = '100%';
-            table.style.borderBottom = '1px solid #e0e0e0'; // Ensure bottom border
-            
-            // Adjust font sizes for mobile landscape to make text larger
-            if (isMobile) {
-                table.style.fontSize = '12px'; // Larger font for mobile landscape
-                const thElements = table.querySelectorAll('th');
-                thElements.forEach(th => {
-                    th.style.fontSize = '0.8rem';
-                });
-                const timeColumns = table.querySelectorAll('.time-column');
-                timeColumns.forEach(tc => {
-                    tc.style.fontSize = '0.7rem';
-                });
-            }
+            table.style.borderBottom = '1px solid #e0e0e0';
             
             // Remove bottom margin from the last row
             const lastRow = table.querySelector('tbody tr:last-child');
@@ -1148,7 +1134,7 @@
             return screenshotContainer;
         }
 
-        // Export table as image
+        // Export table as image - always generate same quality image
         function exportTableAsImage(event) {
             event.preventDefault(); // Prevent link from navigating
             
@@ -1159,32 +1145,9 @@
             // Show loading overlay
             overlay.style.display = 'flex';
             
-            // Determine if we're on mobile and set appropriate dimensions
-            const isMobile = window.innerWidth <= 768;
-            const targetWidth = isMobile ? 2400 : 1600;
-            const targetHeight = isMobile ? 1450 : 1000;
-            
-            // For mobile, we're creating a landscape image (2400x1450)
-            // For desktop, we're creating a landscape image (1600x1000)
-            
-            // Calculate scale based on container width and target width
-            const containerWidth = parseInt(screenshotContainer.style.width);
-            const scale = targetWidth / containerWidth;
-            
-            // Calculate container height needed for target output
-            // For mobile landscape, we need to account for the rotation
-            let containerHeight;
-            if (isMobile) {
-                // For mobile landscape, the container is rotated 90 degrees
-                // So the container width (1450px) becomes the height in the output
-                // and we need to calculate the appropriate height for the container
-                containerHeight = (targetHeight / scale) * 0.85; // Adjust factor for better fit
-            } else {
-                containerHeight = targetHeight / scale;
-            }
-            
-            // Set container height
-            screenshotContainer.style.height = containerHeight + 'px';
+            // ALWAYS use same dimensions for consistent image output
+            const targetWidth = 1600; // Double the container width for high quality
+            const scale = 2; // Fixed scale for consistent quality
             
             // Use html2canvas to capture the screenshot container
             html2canvas(screenshotContainer, {
@@ -1192,68 +1155,34 @@
                 backgroundColor: '#ffffff',
                 useCORS: true,
                 logging: false,
-                width: containerWidth,
-                height: containerHeight,
-                windowWidth: containerWidth,
-                windowHeight: containerHeight,
+                width: 800,
+                height: screenshotContainer.scrollHeight,
+                windowWidth: 800,
+                windowHeight: screenshotContainer.scrollHeight,
                 onclone: function(clonedDoc) {
                     // Ensure minimal white space in the cloned version
                     const clonedContainer = clonedDoc.getElementById('screenshot-container');
                     if (clonedContainer) {
                         clonedContainer.style.padding = '12px 10px 1px 10px';
                         clonedContainer.style.boxShadow = 'none';
-                        
-                        // For mobile, ensure the rotation is applied
-                        if (isMobile) {
-                            clonedContainer.style.transform = 'rotate(90deg)';
-                            clonedContainer.style.transformOrigin = 'top left';
-                        }
+                        // Force desktop styles
+                        clonedContainer.style.fontSize = '11px';
                     }
                 }
             }).then(canvas => {
-                // For mobile, we need to rotate the canvas back since we rotated the container
-                if (isMobile) {
-                    const rotatedCanvas = document.createElement('canvas');
-                    rotatedCanvas.width = targetWidth;
-                    rotatedCanvas.height = targetHeight;
-                    const ctx = rotatedCanvas.getContext('2d');
-                    
-                    // Fill with white background
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(0, 0, targetWidth, targetHeight);
-                    
-                    // Rotate the context 90 degrees counter-clockwise
-                    ctx.translate(0, targetHeight);
-                    ctx.rotate(-Math.PI / 2);
-                    
-                    // Draw the captured canvas
-                    ctx.drawImage(canvas, 0, 0, targetHeight, targetWidth);
-                    
-                    // Create download link with rotated canvas
-                    const link = document.createElement('a');
-                    const dateStr = new Date().toISOString().slice(0,10);
-                    const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
-                    link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}-Landscape.png`;
-                    link.href = rotatedCanvas.toDataURL('image/png');
-                    link.click();
-                } else {
-                    // For desktop, use the canvas as is
-                    const link = document.createElement('a');
-                    const dateStr = new Date().toISOString().slice(0,10);
-                    const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
-                    link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                }
+                // Create download link
+                const link = document.createElement('a');
+                const dateStr = new Date().toISOString().slice(0,10);
+                const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
+                link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
                 
                 // Hide loading overlay
                 overlay.style.display = 'none';
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
-                screenshotContainer.style.width = '800px';
-                screenshotContainer.style.height = 'auto';
-                screenshotContainer.style.transform = 'none';
             }).catch(error => {
                 console.error('Error generating image:', error);
                 alert('Failed to generate image. Please try again.');
@@ -1261,9 +1190,6 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
-                screenshotContainer.style.width = '800px';
-                screenshotContainer.style.height = 'auto';
-                screenshotContainer.style.transform = 'none';
             });
         }
 
