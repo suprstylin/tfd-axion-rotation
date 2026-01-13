@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>TFD Axion Operational Area Rotation</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,7 +36,7 @@
         h1 {
             color: #333;
             text-align: center;
-            margin-bottom: 12px; /* Reduced from 22px by 10px */
+            margin-bottom: 12px;
             font-size: 1.2rem;
         }
 
@@ -293,23 +293,25 @@
             margin: 0;
         }
 
-        /* Hidden container for screenshot - MINIMAL WHITE SPACE */
+        /* Hidden container for screenshot - Fixed size for 2400x1450 */
         #screenshot-container {
             position: absolute;
             left: -9999px;
             top: -9999px;
-            width: 800px;
+            width: 2400px;
+            height: 1450px;
             background-color: white;
-            padding: 12px 10px 1px 10px; /* Increased top padding from 2px to 12px */
+            padding: 12px 10px 1px 10px;
             border-radius: 0;
             box-shadow: 0 0 0 rgba(0,0,0,0);
+            overflow: hidden;
         }
 
         .screenshot-title {
             color: #333;
             text-align: center;
-            margin-bottom: 12px; /* Same as website: 12px */
-            font-size: 1.2rem; /* Same as website: 1.2rem */
+            margin-bottom: 12px;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 
@@ -317,7 +319,7 @@
             background-color: #e3f2fd;
             padding: 6px;
             border-radius: 3px;
-            margin-bottom: 8px; /* Same as website: 8px */
+            margin-bottom: 8px;
             font-size: 10px;
         }
 
@@ -345,12 +347,12 @@
             
             h1 {
                 font-size: 1.1rem;
-                margin-bottom: 10px; /* Adjusted */
+                margin-bottom: 10px;
             }
             
             .screenshot-title {
                 font-size: 1.1rem;
-                margin-bottom: 10px; /* Adjusted */
+                margin-bottom: 10px;
             }
             
             table {
@@ -386,7 +388,7 @@
             
             /* Footer text size adjustment for mobile */
             .page-footer {
-                font-size: 10px; /* Match the blue box text size */
+                font-size: 10px;
             }
         }
 
@@ -401,12 +403,12 @@
             
             h1 {
                 font-size: 1.0rem;
-                margin-bottom: 8px; /* Adjusted */
+                margin-bottom: 8px;
             }
             
             .screenshot-title {
                 font-size: 1.0rem;
-                margin-bottom: 8px; /* Adjusted */
+                margin-bottom: 8px;
             }
             
             table {
@@ -449,7 +451,7 @@
             
             /* Footer text size adjustment for mobile */
             .page-footer {
-                font-size: 9px; /* Match the blue box text size */
+                font-size: 9px;
             }
         }
 
@@ -461,12 +463,12 @@
             
             h1 {
                 font-size: 0.9rem;
-                margin-bottom: 6px; /* Adjusted */
+                margin-bottom: 6px;
             }
             
             .screenshot-title {
                 font-size: 0.9rem;
-                margin-bottom: 6px; /* Adjusted */
+                margin-bottom: 6px;
             }
             
             th, td {
@@ -526,7 +528,7 @@
             
             /* Footer text size adjustment for mobile */
             .page-footer {
-                font-size: 8px; /* Match the blue box text size */
+                font-size: 8px;
             }
         }
 
@@ -541,12 +543,12 @@
             
             h1 {
                 font-size: 0.85rem;
-                margin-bottom: 4px; /* Adjusted */
+                margin-bottom: 4px;
             }
             
             .screenshot-title {
                 font-size: 0.85rem;
-                margin-bottom: 4px; /* Adjusted */
+                margin-bottom: 4px;
             }
             
             table {
@@ -601,7 +603,7 @@
             
             /* Footer text size adjustment for mobile */
             .page-footer {
-                font-size: 7.5px; /* Match the blue box text size */
+                font-size: 7.5px;
                 padding: 6px;
             }
         }
@@ -613,12 +615,12 @@
             
             h1 {
                 font-size: 0.8rem;
-                margin-bottom: 2px; /* Adjusted */
+                margin-bottom: 2px;
             }
             
             .screenshot-title {
                 font-size: 0.8rem;
-                margin-bottom: 2px; /* Adjusted */
+                margin-bottom: 2px;
             }
             
             thead .time-column,
@@ -646,7 +648,7 @@
             
             /* Footer text size adjustment for mobile */
             .page-footer {
-                font-size: 7.5px; /* Match the blue box text size */
+                font-size: 7.5px;
             }
         }
 
@@ -672,10 +674,70 @@
             
             /* Footer text size adjustment for mobile */
             .page-footer {
-                font-size: 7px; /* Match the blue box text size */
+                font-size: 7px;
+            }
+        }
+        
+        /* Landscape mode - 100% zoom */
+        @media (orientation: landscape) {
+            body {
+                transform-origin: top left;
+            }
+        }
+        
+        /* Portrait mode - 50% zoom */
+        @media (orientation: portrait) {
+            body {
+                transform-origin: top left;
+            }
+            
+            /* Adjust for smaller screens in portrait */
+            @media (max-width: 768px) {
+                body {
+                    transform: scale(0.5);
+                    width: 200%;
+                    height: 200%;
+                    position: relative;
+                    left: -50%;
+                    top: -50%;
+                }
+                
+                .schedule-container {
+                    transform: scale(1);
+                    position: relative;
+                    z-index: 10;
+                }
             }
         }
     </style>
+    <script>
+        // Viewport adjustment for mobile
+        function adjustViewportForMobile() {
+            const viewportMeta = document.querySelector('meta[name="viewport"]');
+            const isPortrait = window.innerHeight > window.innerWidth;
+            
+            if (isPortrait && window.innerWidth <= 768) {
+                // Portrait mobile - 50% zoom
+                viewportMeta.setAttribute('content', 'width=1600, initial-scale=0.5, maximum-scale=1.0, user-scalable=yes');
+            } else {
+                // Landscape or desktop - 100% zoom
+                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+            }
+        }
+        
+        // Initialize viewport on load
+        document.addEventListener('DOMContentLoaded', function() {
+            adjustViewportForMobile();
+            
+            // Re-adjust on resize
+            window.addEventListener('resize', adjustViewportForMobile);
+            
+            // Re-adjust on orientation change
+            window.addEventListener('orientationchange', function() {
+                setTimeout(adjustViewportForMobile, 100);
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="schedule-container">
@@ -1075,7 +1137,7 @@
             return roundedOffset;
         }
 
-        // Create screenshot content with minimal white space
+        // Create screenshot content for fixed 2400x1450 image
         function createScreenshotContent(currentTimezoneName) {
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
@@ -1092,19 +1154,33 @@
             note.innerHTML = `<strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for <strong>${currentTimezoneName}</strong>.`;
             screenshotContainer.appendChild(note);
             
-            // Clone the table
-            const table = document.getElementById('schedule-table').cloneNode(true);
-            table.style.margin = '0'; // No margins
+            // Clone the table from the visible schedule
+            const originalTable = document.getElementById('schedule-table');
+            const table = originalTable.cloneNode(true);
+            
+            // Apply screenshot-specific styling
             table.style.width = '100%';
-            table.style.borderBottom = '1px solid #e0e0e0'; // Ensure bottom border
+            table.style.margin = '0';
+            table.style.borderCollapse = 'collapse';
             
-            // Remove bottom margin from the last row
-            const lastRow = table.querySelector('tbody tr:last-child');
-            if (lastRow) {
-                lastRow.style.marginBottom = '0';
-            }
+            // Scale up the table for the 2400px width
+            table.style.fontSize = '24px'; // Much larger font for high-resolution image
             
-            // Ensure AX Power cells have red background and proper text styling
+            // Scale up all elements in the table
+            const allCells = table.querySelectorAll('th, td');
+            allCells.forEach(cell => {
+                cell.style.padding = '10px 8px';
+                cell.style.fontSize = 'inherit';
+            });
+            
+            // Scale up time columns specifically
+            const timeColumns = table.querySelectorAll('.time-column');
+            timeColumns.forEach(col => {
+                col.style.fontSize = '22px';
+                col.style.padding = '10px 8px';
+            });
+            
+            // Ensure AX Power cells have proper styling
             const cells = table.querySelectorAll('td');
             cells.forEach(cell => {
                 if (cell.innerHTML.includes('AX Power')) {
@@ -1125,66 +1201,93 @@
             return screenshotContainer;
         }
 
-        // Export table as image - FIXED FOR MOBILE
+        // Export table as image - Fixed for 2400x1450
         function exportTableAsImage(event) {
-            event.preventDefault(); // Prevent link from navigating
+            event.preventDefault();
             
             const currentTimezoneName = document.getElementById('current-tz-display').textContent;
             const screenshotContainer = createScreenshotContent(currentTimezoneName);
             const overlay = document.getElementById('export-overlay');
             
-            // Get the actual rendered table height from the visible page
-            const visibleTable = document.getElementById('schedule-table');
-            const tableHeight = visibleTable.offsetHeight;
-            const tableRows = visibleTable.querySelectorAll('tbody tr').length;
-            
-            // Calculate approximate height needed for the screenshot
-            // For mobile, we need to ensure the container is tall enough
-            const estimatedRowHeight = tableRows > 0 ? tableHeight / tableRows : 35;
-            const estimatedTotalHeight = estimatedRowHeight * tableRows + 150; // Add extra for header and notes
-            
-            // Set a minimum height to ensure all content is captured
-            screenshotContainer.style.minHeight = `${Math.max(estimatedTotalHeight, 800)}px`;
-            
             // Show loading overlay
             overlay.style.display = 'flex';
             
-            // Use html2canvas to capture the screenshot container
+            // Calculate dimensions for 2400x1450
+            const targetWidth = 2400;
+            const targetHeight = 1450;
+            
+            // Use html2canvas with specific dimensions
             html2canvas(screenshotContainer, {
-                scale: 3, // Higher scale for better quality on mobile
+                scale: 1, // We'll handle scaling via width/height
+                width: targetWidth,
+                height: targetHeight,
                 backgroundColor: '#ffffff',
                 useCORS: true,
                 logging: false,
-                width: screenshotContainer.offsetWidth,
-                height: screenshotContainer.scrollHeight,
-                windowWidth: screenshotContainer.scrollWidth,
-                windowHeight: screenshotContainer.scrollHeight,
                 onclone: function(clonedDoc) {
-                    // Ensure minimal white space in the cloned version
+                    // Ensure the cloned container has the right dimensions
                     const clonedContainer = clonedDoc.getElementById('screenshot-container');
                     if (clonedContainer) {
-                        // Remove any height restrictions
-                        clonedContainer.style.height = 'auto';
-                        clonedContainer.style.minHeight = `${estimatedTotalHeight}px`;
+                        clonedContainer.style.width = targetWidth + 'px';
+                        clonedContainer.style.height = targetHeight + 'px';
+                        clonedContainer.style.padding = '40px 30px';
                         
-                        // Ensure all rows are visible
+                        // Scale up the content for high resolution
                         const clonedTable = clonedContainer.querySelector('table');
                         if (clonedTable) {
+                            clonedTable.style.fontSize = '32px';
+                            
+                            const clonedCells = clonedTable.querySelectorAll('th, td');
+                            clonedCells.forEach(cell => {
+                                cell.style.padding = '15px 10px';
+                                cell.style.fontSize = 'inherit';
+                            });
+                            
+                            const clonedTimeCols = clonedTable.querySelectorAll('.time-column');
+                            clonedTimeCols.forEach(col => {
+                                col.style.fontSize = '30px';
+                                col.style.padding = '15px 10px';
+                            });
+                            
+                            // Ensure proper row heights
                             const clonedRows = clonedTable.querySelectorAll('tbody tr');
                             clonedRows.forEach(row => {
-                                row.style.height = 'auto';
-                                row.style.minHeight = '25px';
+                                row.style.height = '60px';
                             });
+                        }
+                        
+                        // Scale up the title
+                        const clonedTitle = clonedContainer.querySelector('.screenshot-title');
+                        if (clonedTitle) {
+                            clonedTitle.style.fontSize = '48px';
+                            clonedTitle.style.marginBottom = '30px';
+                        }
+                        
+                        // Scale up the note
+                        const clonedNote = clonedContainer.querySelector('.screenshot-note');
+                        if (clonedNote) {
+                            clonedNote.style.fontSize = '28px';
+                            clonedNote.style.padding = '15px';
+                            clonedNote.style.marginBottom = '25px';
                         }
                     }
                 }
             }).then(canvas => {
+                // Create a new canvas with exactly 2400x1450
+                const finalCanvas = document.createElement('canvas');
+                finalCanvas.width = targetWidth;
+                finalCanvas.height = targetHeight;
+                const ctx = finalCanvas.getContext('2d');
+                
+                // Draw the captured canvas onto the final canvas
+                ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
+                
                 // Create download link
                 const link = document.createElement('a');
                 const dateStr = new Date().toISOString().slice(0,10);
                 const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
                 link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
-                link.href = canvas.toDataURL('image/png');
+                link.href = finalCanvas.toDataURL('image/png');
                 link.click();
                 
                 // Hide loading overlay
@@ -1192,7 +1295,6 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
-                screenshotContainer.style.minHeight = '';
             }).catch(error => {
                 console.error('Error generating image:', error);
                 alert('Failed to generate image. Please try again.');
@@ -1200,7 +1302,6 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
-                screenshotContainer.style.minHeight = '';
             });
         }
 
@@ -1226,6 +1327,9 @@
             
             // Add event listener for export link
             exportLink.addEventListener('click', exportTableAsImage);
+            
+            // Re-run viewport adjustment after content loads
+            setTimeout(adjustViewportForMobile, 100);
         });
     </script>
 </body>
