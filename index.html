@@ -6,6 +6,7 @@
     <title>TFD Axion Operational Area Rotation</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -28,15 +29,15 @@
             padding: 12px;
             border-radius: 6px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            max-width: 800px; /* Increased from 750px to accommodate wider cells */
+            max-width: 800px;
             margin: 0 auto;
         }
 
         h1 {
             color: #333;
             text-align: center;
-            margin-bottom: 12px;
-            font-size: 1.4rem;
+            margin-bottom: 12px; /* Reduced from 22px by 10px */
+            font-size: 1.2rem;
         }
 
         .note {
@@ -80,15 +81,45 @@
             background-color: white;
         }
 
+        .timezone-display-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
         .current-timezone {
-            display: block;
-            margin-top: 4px;
             color: #666;
             font-size: 10px;
+            flex-grow: 1;
         }
 
         .current-timezone strong {
             color: #4a6fa5;
+        }
+
+        .export-link {
+            color: #4a6fa5;
+            font-size: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: color 0.3s, text-decoration 0.3s;
+            white-space: nowrap;
+        }
+
+        .export-link:hover {
+            color: #3a5a8a;
+            text-decoration: underline;
+        }
+
+        .export-link i {
+            font-size: 11px;
         }
 
         table {
@@ -104,7 +135,7 @@
             background-color: #4a6fa5;
             color: white;
             font-weight: bold;
-            padding: 3px 2px; /* Added 1px horizontal padding */
+            padding: 3px 2px;
             text-align: center;
             border: 1px solid #3a5a8a;
             font-size: 0.55rem;
@@ -112,7 +143,7 @@
         }
 
         td {
-            padding: 2px 2px; /* Added 1px horizontal padding (from 1px to 2px) */
+            padding: 2px 2px;
             text-align: center;
             border: 1px solid #ddd;
             vertical-align: middle;
@@ -125,7 +156,7 @@
             background-color: #4a6fa5;
             color: white;
             border: 1px solid #3a5a8a;
-            width: 63px; /* Increased from 60px to 63px */
+            width: 63px;
         }
 
         tbody .time-column {
@@ -134,19 +165,29 @@
             font-weight: bold;
             border: 1px solid #c5cae9;
             font-size: 0.55rem;
-            padding: 2px 2px; /* Added 1px horizontal padding */
-            width: 63px; /* Increased from 60px to 63px */
+            padding: 2px 2px;
+            width: 63px;
             white-space: nowrap;
         }
 
+        /* Red background for AX Power cells */
         .axpower {
-            color: #d32f2f;
-            font-weight: bold;
             background-color: #ffebee;
         }
 
+        /* Only color the AX Power text in red */
+        .axpower-text {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        /* Regular black text for other content */
+        .black-text {
+            color: #000;
+        }
+
         .half-event {
-            padding: 1px 2px; /* Added 1px horizontal padding */
+            padding: 1px 2px;
         }
 
         .half-event.axpower {
@@ -218,6 +259,83 @@
             border-top: 1px solid #eee;
         }
 
+        /* Loading overlay for export */
+        .export-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .export-spinner {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .export-spinner i {
+            font-size: 24px;
+            color: #4a6fa5;
+            margin-bottom: 10px;
+        }
+
+        .export-spinner p {
+            font-size: 12px;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Hidden container for screenshot - MINIMAL WHITE SPACE */
+        #screenshot-container {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 800px;
+            background-color: white;
+            padding: 12px 10px 1px 10px; /* Increased top padding from 2px to 12px */
+            border-radius: 0;
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+
+        .screenshot-title {
+            color: #333;
+            text-align: center;
+            margin-bottom: 12px; /* Same as website: 12px */
+            font-size: 1.2rem; /* Same as website: 1.2rem */
+            font-weight: bold;
+        }
+
+        .screenshot-note {
+            background-color: #e3f2fd;
+            padding: 6px;
+            border-radius: 3px;
+            margin-bottom: 8px; /* Same as website: 8px */
+            font-size: 10px;
+        }
+
+        .screenshot-note strong {
+            color: #333;
+        }
+
+        .screenshot-timezone {
+            color: #666;
+            font-size: 10px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .screenshot-timezone strong {
+            color: #4a6fa5;
+        }
+
         /* Responsive design */
         @media (max-width: 992px) {
             .schedule-container {
@@ -225,12 +343,22 @@
                 max-width: 95%;
             }
             
+            h1 {
+                font-size: 1.1rem;
+                margin-bottom: 10px; /* Adjusted */
+            }
+            
+            .screenshot-title {
+                font-size: 1.1rem;
+                margin-bottom: 10px; /* Adjusted */
+            }
+            
             table {
                 font-size: 8px;
             }
             
             th, td {
-                padding: 2px 2px; /* Keep 2px horizontal padding */
+                padding: 2px 2px;
             }
             
             th {
@@ -240,7 +368,7 @@
             thead .time-column,
             tbody .time-column {
                 font-size: 0.5rem;
-                width: 58px; /* Increased from 55px to 58px */
+                width: 58px;
             }
             
             /* Adjust row heights for smaller screens */
@@ -267,7 +395,13 @@
             }
             
             h1 {
-                font-size: 1.2rem;
+                font-size: 1.0rem;
+                margin-bottom: 8px; /* Adjusted */
+            }
+            
+            .screenshot-title {
+                font-size: 1.0rem;
+                margin-bottom: 8px; /* Adjusted */
             }
             
             table {
@@ -285,13 +419,14 @@
             
             .timezone-info label,
             .timezone-selector,
-            .current-timezone {
+            .current-timezone,
+            .export-link {
                 font-size: 9px;
             }
             
             thead .time-column,
             tbody .time-column {
-                width: 53px; /* Increased from 50px to 53px */
+                width: 53px;
             }
             
             /* Adjust row heights for mobile */
@@ -314,13 +449,23 @@
                 margin: 10px 0;
             }
             
+            h1 {
+                font-size: 0.9rem;
+                margin-bottom: 6px; /* Adjusted */
+            }
+            
+            .screenshot-title {
+                font-size: 0.9rem;
+                margin-bottom: 6px; /* Adjusted */
+            }
+            
             th, td {
-                padding: 2px 1px; /* Slightly reduced but still more than before */
+                padding: 2px 1px;
             }
             
             tbody .time-column {
                 font-size: 0.45rem;
-                width: 48px; /* Increased from 45px to 48px */
+                width: 48px;
             }
             
             th {
@@ -337,12 +482,23 @@
             
             .timezone-info label,
             .timezone-selector,
-            .current-timezone {
+            .current-timezone,
+            .export-link {
                 font-size: 8px;
             }
             
+            .timezone-display-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .export-link {
+                align-self: flex-end;
+            }
+            
             thead .time-column {
-                width: 48px; /* Increased from 45px to 48px */
+                width: 48px;
             }
             
             /* Adjust row heights for smallest screens */
@@ -369,8 +525,13 @@
             }
             
             h1 {
-                font-size: 1.1rem;
-                margin-bottom: 8px;
+                font-size: 0.85rem;
+                margin-bottom: 4px; /* Adjusted */
+            }
+            
+            .screenshot-title {
+                font-size: 0.85rem;
+                margin-bottom: 4px; /* Adjusted */
             }
             
             table {
@@ -379,12 +540,12 @@
             }
             
             th, td {
-                padding: 1px 1px; /* Keep 1px horizontal padding */
+                padding: 1px 1px;
             }
             
             thead .time-column,
             tbody .time-column {
-                width: 43px; /* Increased from 40px to 43px */
+                width: 43px;
                 font-size: 0.4rem;
             }
             
@@ -407,7 +568,8 @@
             
             .timezone-info label,
             .timezone-selector,
-            .current-timezone {
+            .current-timezone,
+            .export-link {
                 font-size: 7.5px;
             }
             
@@ -428,9 +590,19 @@
                 font-size: 6px;
             }
             
+            h1 {
+                font-size: 0.8rem;
+                margin-bottom: 2px; /* Adjusted */
+            }
+            
+            .screenshot-title {
+                font-size: 0.8rem;
+                margin-bottom: 2px; /* Adjusted */
+            }
+            
             thead .time-column,
             tbody .time-column {
-                width: 41px; /* Increased from 38px to 41px */
+                width: 41px;
                 font-size: 0.35rem;
             }
             
@@ -459,7 +631,17 @@
             
             thead .time-column,
             tbody .time-column {
-                width: 38px; /* Increased from 35px to 38px */
+                width: 38px;
+            }
+            
+            .timezone-display-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .export-link {
+                align-self: flex-start;
+                margin-top: 4px;
             }
         }
     </style>
@@ -469,7 +651,7 @@
         <h1>TFD Axion Operational Area Rotation</h1>
         
         <div class="note">
-            <strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for your selected timezone. "AX Power Converter Station" is highlighted in red.
+            <strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for your selected timezone.
         </div>
 
         <div class="timezone-info">
@@ -503,7 +685,13 @@
                 <option value="13">GMT+13 (Tonga)</option>
                 <option value="14">GMT+14 (Line Islands)</option>
             </select>
-            <span class="current-timezone">Schedule displayed in: <strong id="current-tz-display">Detecting your timezone...</strong></span>
+            
+            <div class="timezone-display-row">
+                <span class="current-timezone">Schedule displayed in: <strong id="current-tz-display">Detecting your timezone...</strong></span>
+                <a href="#" id="export-link" class="export-link">
+                    <i class="fas fa-camera"></i> export current schedule as Image
+                </a>
+            </div>
         </div>
 
         <div class="even-tz-note" id="even-tz-note">
@@ -549,6 +737,17 @@
             <p>TFD Axion Operational Area Rotation | Unofficial Fan Resource | Data sourced from game events</p>
             <p>This site is not affiliated with NEXON Korea Corp. or The First Descendant.</p>
         </footer>
+    </div>
+
+    <!-- Hidden container for screenshot generation -->
+    <div id="screenshot-container"></div>
+
+    <!-- Loading overlay for export -->
+    <div id="export-overlay" class="export-overlay">
+        <div class="export-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Generating image...</p>
+        </div>
     </div>
 
     <script>
@@ -784,11 +983,32 @@
                     
                     if (eventKey) {
                         const parts = eventKey.split('/');
-                        const displayName1 = displayNames[parts[0].trim()] || parts[0].trim();
-                        const displayName2 = displayNames[parts[1].trim()] || parts[1].trim();
+                        const part1 = parts[0].trim();
+                        const part2 = parts[1].trim();
                         
-                        cell.textContent = `${displayName1} / ${displayName2}`;
+                        const displayName1 = displayNames[part1] || part1;
+                        const displayName2 = displayNames[part2] || part2;
                         
+                        // Create colored text for AX Power only, rest in black
+                        let cellContent = '';
+                        
+                        if (part1 === 'AX_Power') {
+                            cellContent += `<span class="axpower-text">${displayName1}</span>`;
+                        } else {
+                            cellContent += `<span class="black-text">${displayName1}</span>`;
+                        }
+                        
+                        cellContent += '<span class="black-text"> / </span>';
+                        
+                        if (part2 === 'AX_Power') {
+                            cellContent += `<span class="axpower-text">${displayName2}</span>`;
+                        } else {
+                            cellContent += `<span class="black-text">${displayName2}</span>`;
+                        }
+                        
+                        cell.innerHTML = cellContent;
+                        
+                        // Add axpower class for background if it contains AX Power
                         if (isAXPowerEvent(eventKey)) {
                             cell.classList.add('axpower');
                         }
@@ -828,10 +1048,114 @@
             return roundedOffset;
         }
 
+        // Create screenshot content with minimal white space
+        function createScreenshotContent(currentTimezoneName) {
+            const screenshotContainer = document.getElementById('screenshot-container');
+            screenshotContainer.innerHTML = '';
+            
+            // Create title
+            const title = document.createElement('h1');
+            title.className = 'screenshot-title';
+            title.textContent = 'TFD Axion Operational Area Rotation';
+            screenshotContainer.appendChild(title);
+            
+            // Create note with current timezone
+            const note = document.createElement('div');
+            note.className = 'screenshot-note';
+            note.innerHTML = `<strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for <strong>${currentTimezoneName}</strong>.`;
+            screenshotContainer.appendChild(note);
+            
+            // Clone the table
+            const table = document.getElementById('schedule-table').cloneNode(true);
+            table.style.margin = '0'; // No margins
+            table.style.width = '100%';
+            table.style.borderBottom = '1px solid #e0e0e0'; // Ensure bottom border
+            
+            // Remove bottom margin from the last row
+            const lastRow = table.querySelector('tbody tr:last-child');
+            if (lastRow) {
+                lastRow.style.marginBottom = '0';
+            }
+            
+            // Ensure AX Power cells have red background and proper text styling
+            const cells = table.querySelectorAll('td');
+            cells.forEach(cell => {
+                if (cell.innerHTML.includes('AX Power')) {
+                    // Make sure AX Power text is red and other text is black
+                    const content = cell.innerHTML;
+                    if (content.includes('AX Power /')) {
+                        cell.innerHTML = `<span class="axpower-text">AX Power</span><span class="black-text"> / ${content.split(' / ')[1]}</span>`;
+                    } else if (content.includes('/ AX Power')) {
+                        cell.innerHTML = `<span class="black-text">${content.split(' / ')[0]} / </span><span class="axpower-text">AX Power</span>`;
+                    }
+                    // Ensure the cell has the axpower class for background
+                    cell.classList.add('axpower');
+                }
+            });
+            
+            screenshotContainer.appendChild(table);
+            
+            return screenshotContainer;
+        }
+
+        // Export table as image
+        function exportTableAsImage(event) {
+            event.preventDefault(); // Prevent link from navigating
+            
+            const currentTimezoneName = document.getElementById('current-tz-display').textContent;
+            const screenshotContainer = createScreenshotContent(currentTimezoneName);
+            const overlay = document.getElementById('export-overlay');
+            
+            // Show loading overlay
+            overlay.style.display = 'flex';
+            
+            // Use html2canvas to capture the screenshot container with minimal white space
+            html2canvas(screenshotContainer, {
+                scale: 2, // Higher scale for better quality
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false,
+                width: screenshotContainer.offsetWidth,
+                height: screenshotContainer.scrollHeight, // Use scrollHeight to capture exactly what's needed
+                windowWidth: screenshotContainer.scrollWidth,
+                windowHeight: screenshotContainer.scrollHeight,
+                onclone: function(clonedDoc) {
+                    // Ensure minimal white space in the cloned version
+                    const clonedContainer = clonedDoc.getElementById('screenshot-container');
+                    if (clonedContainer) {
+                        clonedContainer.style.padding = '12px 10px 1px 10px';
+                        clonedContainer.style.boxShadow = 'none';
+                    }
+                }
+            }).then(canvas => {
+                // Create download link
+                const link = document.createElement('a');
+                const dateStr = new Date().toISOString().slice(0,10);
+                const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
+                link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Hide loading overlay
+                overlay.style.display = 'none';
+                
+                // Clean up
+                screenshotContainer.innerHTML = '';
+            }).catch(error => {
+                console.error('Error generating image:', error);
+                alert('Failed to generate image. Please try again.');
+                overlay.style.display = 'none';
+                
+                // Clean up
+                screenshotContainer.innerHTML = '';
+            });
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             const selector = document.getElementById('timezone-selector');
             const display = document.getElementById('current-tz-display');
+            const exportLink = document.getElementById('export-link');
             
             const userOffset = detectUserTimezone();
             selector.value = userOffset;
@@ -846,6 +1170,9 @@
                 display.textContent = timezoneNames[this.value];
                 toggleEvenTimezoneNote(offset);
             });
+            
+            // Add event listener for export link
+            exportLink.addEventListener('click', exportTableAsImage);
         });
     </script>
 </body>
