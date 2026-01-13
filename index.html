@@ -1069,14 +1069,25 @@
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
             
-            // Determine if we're on mobile
+            // Determine if we're on mobile (portrait mode)
+            const isMobilePortrait = window.innerWidth <= 768;
+            
+            // For mobile devices, we'll use landscape orientation for the screenshot
+            // by rotating the container 90 degrees and adjusting dimensions
             const isMobile = window.innerWidth <= 768;
             
-            // Set container dimensions based on device
             if (isMobile) {
-                screenshotContainer.style.width = '1200px'; // For 2400px final output with scale: 2
+                // For mobile landscape export, we'll use a wider container
+                screenshotContainer.style.width = '1450px'; // Height becomes width in landscape
+                screenshotContainer.style.transform = 'rotate(90deg)';
+                screenshotContainer.style.transformOrigin = 'top left';
+                screenshotContainer.style.position = 'absolute';
+                screenshotContainer.style.left = '0';
+                screenshotContainer.style.top = '0';
             } else {
-                screenshotContainer.style.width = '800px'; // For 1600px final output with scale: 2
+                screenshotContainer.style.width = '800px';
+                screenshotContainer.style.transform = 'none';
+                screenshotContainer.style.position = 'absolute';
             }
             
             // Create title
@@ -1096,6 +1107,19 @@
             table.style.margin = '0'; // No margins
             table.style.width = '100%';
             table.style.borderBottom = '1px solid #e0e0e0'; // Ensure bottom border
+            
+            // Adjust font sizes for mobile landscape to make text larger
+            if (isMobile) {
+                table.style.fontSize = '12px'; // Larger font for mobile landscape
+                const thElements = table.querySelectorAll('th');
+                thElements.forEach(th => {
+                    th.style.fontSize = '0.8rem';
+                });
+                const timeColumns = table.querySelectorAll('.time-column');
+                timeColumns.forEach(tc => {
+                    tc.style.fontSize = '0.7rem';
+                });
+            }
             
             // Remove bottom margin from the last row
             const lastRow = table.querySelector('tbody tr:last-child');
@@ -1140,9 +1164,27 @@
             const targetWidth = isMobile ? 2400 : 1600;
             const targetHeight = isMobile ? 1450 : 1000;
             
+            // For mobile, we're creating a landscape image (2400x1450)
+            // For desktop, we're creating a landscape image (1600x1000)
+            
             // Calculate scale based on container width and target width
             const containerWidth = parseInt(screenshotContainer.style.width);
             const scale = targetWidth / containerWidth;
+            
+            // Calculate container height needed for target output
+            // For mobile landscape, we need to account for the rotation
+            let containerHeight;
+            if (isMobile) {
+                // For mobile landscape, the container is rotated 90 degrees
+                // So the container width (1450px) becomes the height in the output
+                // and we need to calculate the appropriate height for the container
+                containerHeight = (targetHeight / scale) * 0.85; // Adjust factor for better fit
+            } else {
+                containerHeight = targetHeight / scale;
+            }
+            
+            // Set container height
+            screenshotContainer.style.height = containerHeight + 'px';
             
             // Use html2canvas to capture the screenshot container
             html2canvas(screenshotContainer, {
@@ -1151,32 +1193,67 @@
                 useCORS: true,
                 logging: false,
                 width: containerWidth,
-                height: targetHeight / scale, // Calculate container height needed for target output
+                height: containerHeight,
                 windowWidth: containerWidth,
-                windowHeight: targetHeight / scale,
+                windowHeight: containerHeight,
                 onclone: function(clonedDoc) {
                     // Ensure minimal white space in the cloned version
                     const clonedContainer = clonedDoc.getElementById('screenshot-container');
                     if (clonedContainer) {
                         clonedContainer.style.padding = '12px 10px 1px 10px';
                         clonedContainer.style.boxShadow = 'none';
+                        
+                        // For mobile, ensure the rotation is applied
+                        if (isMobile) {
+                            clonedContainer.style.transform = 'rotate(90deg)';
+                            clonedContainer.style.transformOrigin = 'top left';
+                        }
                     }
                 }
             }).then(canvas => {
-                // Create download link
-                const link = document.createElement('a');
-                const dateStr = new Date().toISOString().slice(0,10);
-                const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
-                link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                // For mobile, we need to rotate the canvas back since we rotated the container
+                if (isMobile) {
+                    const rotatedCanvas = document.createElement('canvas');
+                    rotatedCanvas.width = targetWidth;
+                    rotatedCanvas.height = targetHeight;
+                    const ctx = rotatedCanvas.getContext('2d');
+                    
+                    // Fill with white background
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, targetWidth, targetHeight);
+                    
+                    // Rotate the context 90 degrees counter-clockwise
+                    ctx.translate(0, targetHeight);
+                    ctx.rotate(-Math.PI / 2);
+                    
+                    // Draw the captured canvas
+                    ctx.drawImage(canvas, 0, 0, targetHeight, targetWidth);
+                    
+                    // Create download link with rotated canvas
+                    const link = document.createElement('a');
+                    const dateStr = new Date().toISOString().slice(0,10);
+                    const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
+                    link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}-Landscape.png`;
+                    link.href = rotatedCanvas.toDataURL('image/png');
+                    link.click();
+                } else {
+                    // For desktop, use the canvas as is
+                    const link = document.createElement('a');
+                    const dateStr = new Date().toISOString().slice(0,10);
+                    const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
+                    link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }
                 
                 // Hide loading overlay
                 overlay.style.display = 'none';
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
-                screenshotContainer.style.width = '800px'; // Reset to default
+                screenshotContainer.style.width = '800px';
+                screenshotContainer.style.height = 'auto';
+                screenshotContainer.style.transform = 'none';
             }).catch(error => {
                 console.error('Error generating image:', error);
                 alert('Failed to generate image. Please try again.');
@@ -1184,7 +1261,9 @@
                 
                 // Clean up
                 screenshotContainer.innerHTML = '';
-                screenshotContainer.style.width = '800px'; // Reset to default
+                screenshotContainer.style.width = '800px';
+                screenshotContainer.style.height = 'auto';
+                screenshotContainer.style.transform = 'none';
             });
         }
 
