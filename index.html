@@ -188,17 +188,6 @@
             color: #ff6b35; /* Orange only for dark mode */
         }
 
-        /* Hide timezone name in portrait mobile view */
-        .current-timezone .tz-name {
-            display: inline;
-        }
-
-        @media (max-width: 480px) and (orientation: portrait) {
-            .current-timezone .tz-name {
-                display: none;
-            }
-        }
-
         .export-link {
             color: #4a6fa5; /* Blue for light mode */
             font-size: 10px;
@@ -1061,7 +1050,7 @@
                 padding: 3px;
             }
             
-            /* FIX: Keep timezone-display-row as row for portrait mobile */
+            /* Keep timezone-display-row as row for portrait mobile */
             .timezone-display-row {
                 flex-direction: row;
                 align-items: center;
@@ -1433,22 +1422,10 @@
             '14': 'GMT+14 (Line Islands)'
         };
 
-        // Function to get timezone display text for current view
+        // Function to get timezone display text for current view - ALWAYS returns full name
         function getTimezoneDisplayText(timezoneOffset) {
-            const isMobilePortrait = window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
-            const timezoneString = timezoneNames[timezoneOffset];
-            
-            if (isMobilePortrait) {
-                // For mobile portrait, show only GMT offset (remove the name in parentheses)
-                // Extract just the GMT part (e.g., "GMT-5")
-                const match = timezoneString.match(/^(GMT[+-]\d+)/);
-                if (match) {
-                    return match[0];
-                }
-            }
-            
-            // For desktop/landscape or if regex fails, return full string
-            return timezoneString;
+            // Always return the full timezone string
+            return timezoneNames[timezoneOffset] || `GMT${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`;
         }
 
         // Check if event involves AX Power
