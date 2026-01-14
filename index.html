@@ -186,6 +186,27 @@
             color: #000;
         }
 
+        /* Active event highlighting - GREEN */
+        .active-event {
+            background-color: #e8f5e9 !important;
+            position: relative;
+            box-shadow: inset 0 0 0 2px #4caf50;
+        }
+
+        .active-event::after {
+            content: "Current";
+            position: absolute;
+            top: -8px;
+            right: -2px;
+            background: #4caf50;
+            color: white;
+            font-size: 6px;
+            font-weight: bold;
+            padding: 1px 3px;
+            border-radius: 2px;
+            z-index: 1;
+        }
+
         .half-event {
             padding: 1px 2px;
         }
@@ -345,6 +366,16 @@
             height: 35px !important;
         }
 
+        /* IMPORTANT: Remove active event styling from screenshot */
+        #screenshot-container .active-event {
+            background-color: inherit !important;
+            box-shadow: none !important;
+        }
+        
+        #screenshot-container .active-event::after {
+            display: none !important;
+        }
+
         .screenshot-title {
             color: #333;
             text-align: center;
@@ -417,6 +448,11 @@
             table:not(.even-timezone-table) tbody tr {
                 height: 31px !important;
             }
+            
+            .active-event::after {
+                font-size: 5px;
+                top: -7px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -479,6 +515,12 @@
             .mobile-short {
                 font-size: 7px !important;
                 letter-spacing: -0.2px;
+            }
+            
+            .active-event::after {
+                font-size: 5px;
+                top: -6px;
+                right: -1px;
             }
         }
 
@@ -563,6 +605,12 @@
             .mobile-short {
                 font-size: 6.5px !important;
                 letter-spacing: -0.3px;
+            }
+            
+            .active-event::after {
+                font-size: 4px;
+                top: -5px;
+                right: 0;
             }
         }
 
@@ -668,6 +716,10 @@
             .mobile-short {
                 font-size: 5.5px !important;
                 letter-spacing: -0.4px;
+            }
+            
+            .active-event::after {
+                display: none; /* Hide "Current" label on very small screens */
             }
         }
 
@@ -1072,6 +1124,62 @@
             };
         }
 
+        // NEW FUNCTION: Calculate current day and time slot for highlighting
+        function calculateCurrentTimeSlot(timezoneOffset) {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const localTime = new Date(utc + (timezoneOffset * 3600000));
+            
+            const dayIndex = (localTime.getDay() + 6) % 7; // Convert Sunday=0 to Monday=0
+            const currentHour = localTime.getHours();
+            const currentMinute = localTime.getMinutes();
+            
+            const isEven = isEvenTimezone(timezoneOffset);
+            
+            if (isEven) {
+                // Even timezone: 13 time slots
+                if (currentHour === 0) {
+                    // 00:00-01:00 slot
+                    return { dayIndex, timeSlotIndex: 0, isHalfSlot: true };
+                } else if (currentHour === 23) {
+                    // 23:00-00:00 slot
+                    return { dayIndex, timeSlotIndex: 12, isHalfSlot: true };
+                } else {
+                    // 2-hour slots
+                    // Slot index calculation: hour 1-2 -> slot 1, hour 3-4 -> slot 2, etc.
+                    const timeSlotIndex = Math.floor((currentHour + 1) / 2);
+                    return { dayIndex, timeSlotIndex, isHalfSlot: false };
+                }
+            } else {
+                // Odd timezone: 12 time slots
+                const timeSlotIndex = Math.floor(currentHour / 2);
+                return { dayIndex, timeSlotIndex, isHalfSlot: false };
+            }
+        }
+
+        // NEW FUNCTION: Highlight current active event
+        function highlightCurrentEvent(timezoneOffset) {
+            // Remove any existing highlights first
+            const activeCells = document.querySelectorAll('.active-event');
+            activeCells.forEach(cell => {
+                cell.classList.remove('active-event');
+            });
+            
+            // Calculate current time slot
+            const currentSlot = calculateCurrentTimeSlot(timezoneOffset);
+            
+            // Find and highlight the corresponding cell
+            const rows = document.querySelectorAll('#schedule-body tr');
+            
+            if (rows[currentSlot.timeSlotIndex]) {
+                // Get the cell for the current day (add 1 because first column is time)
+                const targetCell = rows[currentSlot.timeSlotIndex].cells[currentSlot.dayIndex + 1];
+                if (targetCell) {
+                    targetCell.classList.add('active-event');
+                }
+            }
+        }
+
         // Generate the schedule table
         function generateSchedule(timezoneOffset) {
             const tbody = document.getElementById('schedule-body');
@@ -1172,6 +1280,9 @@
                 
                 tbody.appendChild(row);
             });
+            
+            // Highlight current event after generating schedule
+            highlightCurrentEvent(timezoneOffset);
         }
 
         // Detect user's timezone offset
@@ -1206,8 +1317,18 @@
             note.innerHTML = `<strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for <strong>${currentTimezoneName}</strong>.`;
             screenshotContainer.appendChild(note);
             
-            // Clone the table
-            const table = document.getElementById('schedule-table').cloneNode(true);
+            // Clone the table but remove active-event classes
+            const originalTable = document.getElementById('schedule-table');
+            const table = originalTable.cloneNode(true);
+            
+            // Remove active-event classes from cloned table
+            const activeCells = table.querySelectorAll('.active-event');
+            activeCells.forEach(cell => {
+                cell.classList.remove('active-event');
+                // Remove the ::after pseudo-element content
+                cell.style.setProperty('--after-content', 'none');
+            });
+            
             table.style.margin = '0';
             table.style.width = '100%';
             table.style.borderBottom = '1px solid #e0e0e0';
@@ -1309,6 +1430,20 @@
             }, 250);
         }
 
+        // NEW: Update highlight every minute
+        let highlightInterval;
+        function startHighlightInterval(timezoneOffset) {
+            // Clear any existing interval
+            if (highlightInterval) {
+                clearInterval(highlightInterval);
+            }
+            
+            // Update highlight every minute
+            highlightInterval = setInterval(() => {
+                highlightCurrentEvent(timezoneOffset);
+            }, 60000); // 60,000ms = 1 minute
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             const selector = document.getElementById('timezone-selector');
@@ -1322,11 +1457,17 @@
             display.textContent = timezoneNames[userOffset];
             toggleEvenTimezoneNote(userOffset);
             
+            // Start the highlight update interval
+            startHighlightInterval(userOffset);
+            
             selector.addEventListener('change', function() {
                 const offset = parseInt(this.value);
                 generateSchedule(offset);
                 display.textContent = timezoneNames[this.value];
                 toggleEvenTimezoneNote(offset);
+                
+                // Restart interval with new timezone
+                startHighlightInterval(offset);
             });
             
             // Add event listener for export link
