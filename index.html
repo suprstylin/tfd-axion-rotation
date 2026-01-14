@@ -210,6 +210,7 @@
             cursor: pointer;
             transition: color 0.3s, text-decoration 0.3s;
             white-space: nowrap;
+            flex-shrink: 0; /* Prevent the export link from shrinking */
         }
 
         .export-link:hover {
@@ -954,13 +955,13 @@
             }
             
             .timezone-display-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
             }
             
             .export-link {
-                align-self: flex-end;
+                align-self: auto;
             }
             
             thead .time-column {
@@ -1060,15 +1061,30 @@
                 padding: 3px;
             }
             
+            /* FIX: Keep timezone-display-row as row for portrait mobile */
             .timezone-display-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 3px;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
+                flex-wrap: nowrap;
             }
             
             .export-link {
-                align-self: flex-start;
-                margin-top: 2px;
+                align-self: auto;
+                margin-top: 0;
+                text-align: right;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 40%; /* Limit width so it doesn't push the timezone text off screen */
+            }
+            
+            .current-timezone {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                flex-shrink: 1;
+                min-width: 0; /* Allow text truncation */
             }
             
             /* Row height adjustments for portrait */
@@ -1126,6 +1142,15 @@
                 font-size: 6.5px;
             }
             
+            .export-link {
+                font-size: 6px;
+                max-width: 45%; /* Slightly more width for export link on very small screens */
+            }
+            
+            .current-timezone {
+                font-size: 6px;
+            }
+            
             .even-timezone-table tbody tr.half-hour-row {
                 height: 14px !important;
             }
@@ -1156,13 +1181,19 @@
             }
             
             .timezone-display-row {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row;
+                align-items: center;
             }
             
             .export-link {
-                align-self: flex-start;
-                margin-top: 2px;
+                align-self: auto;
+                margin-top: 0;
+                font-size: 5.5px;
+                max-width: 50%; /* More width for export link on smallest screens */
+            }
+            
+            .current-timezone {
+                font-size: 5.5px;
             }
             
             .page-footer {
