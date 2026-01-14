@@ -20,8 +20,44 @@
             color: #333;
             line-height: 1.2;
             min-height: 100vh;
-            padding: 10px;
+            padding: 6px 10px 10px 10px; /* Reduced top padding from 10px to 6px */
             font-size: 11px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: #000000;
+            color: #e0e0e0;
+        }
+
+        /* Mode Toggle - Small Text Link - Top Right Corner */
+        .mode-toggle-container {
+            max-width: 800px;
+            margin: 0 auto 5px auto;
+            text-align: right;
+            position: relative;
+        }
+
+        .mode-toggle-link {
+            display: inline-block;
+            color: #333;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: normal;
+            cursor: pointer;
+            transition: color 0.3s;
+            font-family: 'Noto Sans', sans-serif;
+            padding: 0;
+            background: none;
+            border: none;
+        }
+
+        .mode-toggle-link:hover {
+            text-decoration: underline;
+        }
+
+        .dark-mode .mode-toggle-link {
+            color: #e0e0e0;
         }
 
         .schedule-container {
@@ -31,6 +67,12 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             max-width: 800px;
             margin: 0 auto;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .schedule-container {
+            background-color: #1a1a1a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
 
         h1 {
@@ -38,6 +80,11 @@
             text-align: center;
             margin-bottom: 12px;
             font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .dark-mode h1 {
+            color: #e0e0e0;
         }
 
         .note {
@@ -46,6 +93,12 @@
             border-radius: 3px;
             margin: 8px 0;
             font-size: 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode .note {
+            background-color: #2a2a2a;
+            color: #cccccc;
         }
 
         .even-tz-note {
@@ -55,6 +108,12 @@
             margin: 8px 0;
             font-size: 10px;
             display: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode .even-tz-note {
+            background-color: #1e2a1e;
+            color: #cccccc;
         }
 
         .timezone-info {
@@ -62,6 +121,11 @@
             padding: 8px;
             background-color: #f9f9f9;
             border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode .timezone-info {
+            background-color: #2a2a2a;
         }
 
         .timezone-info label {
@@ -70,6 +134,11 @@
             font-weight: 600;
             margin-bottom: 4px;
             font-size: 10px;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .timezone-info label {
+            color: #cccccc;
         }
 
         .timezone-selector {
@@ -79,6 +148,14 @@
             border-radius: 3px;
             font-size: 10px;
             background-color: white;
+            color: #333;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode .timezone-selector {
+            background-color: #333333;
+            border-color: #444444;
+            color: #e0e0e0;
         }
 
         .timezone-display-row {
@@ -94,14 +171,36 @@
             color: #666;
             font-size: 10px;
             flex-grow: 1;
+            transition: color 0.3s;
         }
 
+        .dark-mode .current-timezone {
+            color: #aaaaaa;
+        }
+
+        /* Blue for light mode, orange only for dark mode */
         .current-timezone strong {
-            color: #4a6fa5;
+            color: #4a6fa5; /* Blue for light mode */
+            transition: color 0.3s;
+        }
+
+        .dark-mode .current-timezone strong {
+            color: #ff6b35; /* Orange only for dark mode */
+        }
+
+        /* Hide timezone name in portrait mobile view */
+        .current-timezone .tz-name {
+            display: inline;
+        }
+
+        @media (max-width: 480px) and (orientation: portrait) {
+            .current-timezone .tz-name {
+                display: none;
+            }
         }
 
         .export-link {
-            color: #4a6fa5;
+            color: #4a6fa5; /* Blue for light mode */
             font-size: 10px;
             text-decoration: none;
             font-weight: 600;
@@ -114,8 +213,16 @@
         }
 
         .export-link:hover {
-            color: #3a5a8a;
+            color: #3a5a8a; /* Darker blue on hover for light mode */
             text-decoration: underline;
+        }
+
+        .dark-mode .export-link {
+            color: #ff6b35; /* Orange only for dark mode */
+        }
+
+        .dark-mode .export-link:hover {
+            color: #e55a2b; /* Darker orange on hover in dark mode */
         }
 
         .export-link i {
@@ -129,6 +236,11 @@
             font-size: 8.5px;
             border: 1px solid #e0e0e0;
             table-layout: fixed;
+            transition: border-color 0.3s;
+        }
+
+        .dark-mode table {
+            border-color: #444444;
         }
 
         th {
@@ -140,6 +252,12 @@
             border: 1px solid #3a5a8a;
             font-size: 0.55rem;
             height: 24px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .dark-mode th {
+            background-color: #333333;
+            border-color: #444444;
         }
 
         td {
@@ -150,6 +268,12 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode td {
+            border-color: #444444;
+            color: #e0e0e0;
         }
 
         thead .time-column {
@@ -157,6 +281,12 @@
             color: white;
             border: 1px solid #3a5a8a;
             width: 63px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .dark-mode thead .time-column {
+            background-color: #333333;
+            border-color: #444444;
         }
 
         tbody .time-column {
@@ -168,11 +298,23 @@
             padding: 2px 2px;
             width: 63px;
             white-space: nowrap;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode tbody .time-column {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border-color: #444444;
         }
 
         /* Red background for AX Power cells */
         .axpower {
             background-color: #ffebee;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode .axpower {
+            background-color: #331a1a;
         }
 
         /* Only color the AX Power text in red */
@@ -184,12 +326,22 @@
         /* Regular black text for other content */
         .black-text {
             color: #000;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .black-text {
+            color: #e0e0e0;
         }
 
         /* Active event highlighting - GREEN */
         .active-event {
             background-color: #e8f5e9 !important;
             position: relative;
+            box-shadow: inset 0 0 0 2px #4caf50;
+        }
+
+        .dark-mode .active-event {
+            background-color: #1e2a1e !important;
             box-shadow: inset 0 0 0 2px #4caf50;
         }
 
@@ -213,6 +365,11 @@
 
         .half-event.axpower {
             background-color: #ffebee;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode .half-event.axpower {
+            background-color: #331a1a;
         }
 
         /* Even timezone specific styles */
@@ -237,10 +394,20 @@
 
         tr:nth-child(even) {
             background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode tr:nth-child(even) {
+            background-color: #2a2a2a;
         }
 
         tr:hover {
             background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode tr:hover {
+            background-color: #333333;
         }
 
         .cycle-box {
@@ -249,6 +416,12 @@
             border-radius: 3px;
             margin: 8px 0;
             font-size: 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode .cycle-box {
+            background-color: #2a2a2a;
+            color: #cccccc;
         }
 
         .cycle-box strong {
@@ -257,6 +430,11 @@
             margin-bottom: 4px;
             font-size: 10px;
             font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .cycle-box strong {
+            color: #e0e0e0;
         }
 
         .cycle-box ol {
@@ -269,6 +447,11 @@
             color: #555;
             font-size: 10px;
             line-height: 1.2;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .cycle-box li {
+            color: #aaaaaa;
         }
 
         .page-footer {
@@ -278,6 +461,12 @@
             font-size: 0.65rem;
             margin-top: 12px;
             border-top: 1px solid #eee;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .dark-mode .page-footer {
+            color: #aaaaaa;
+            border-top-color: #444444;
         }
 
         /* Loading overlay for export */
@@ -300,18 +489,33 @@
             border-radius: 8px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode .export-spinner {
+            background-color: #2a2a2a;
         }
 
         .export-spinner i {
             font-size: 24px;
-            color: #4a6fa5;
+            color: #4a6fa5; /* Blue for light mode */
             margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .export-spinner i {
+            color: #ff6b35; /* Orange only for dark mode */
         }
 
         .export-spinner p {
             font-size: 12px;
             color: #333;
             margin: 0;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .export-spinner p {
+            color: #e0e0e0;
         }
 
         /* Hidden container for screenshot - MINIMAL WHITE SPACE */
@@ -325,33 +529,127 @@
             border-radius: 0;
             box-shadow: 0 0 0 rgba(0,0,0,0);
             font-size: 11px !important;
+            transition: background-color 0.3s;
         }
 
-        /* Force desktop styling in screenshot container */
+        /* Dark mode screenshot container */
+        .dark-mode #screenshot-container {
+            background-color: #1a1a1a;
+        }
+
+        /* FIX: Use exact same table styling as website for screenshot */
         #screenshot-container table {
-            font-size: 8.5px !important;
-            border-collapse: collapse !important;
+            width: 100%;
+            border-collapse: collapse;
             margin: 14px 0 !important;
+            font-size: 8.5px !important;
             border: 1px solid #e0e0e0 !important;
+            border-top: 1px solid #e0e0e0 !important;
+            border-right: 1px solid #e0e0e0 !important;
+            border-bottom: 1px solid #e0e0e0 !important;
+            border-left: 1px solid #e0e0e0 !important;
             table-layout: fixed !important;
-            width: 100% !important;
+        }
+
+        .dark-mode #screenshot-container table {
+            border: 1px solid #444444 !important;
+            border-top: 1px solid #444444 !important;
+            border-right: 1px solid #444444 !important;
+            border-bottom: 1px solid #444444 !important;
+            border-left: 1px solid #444444 !important;
         }
 
         #screenshot-container th {
-            font-size: 0.55rem !important;
+            background-color: #4a6fa5;
+            color: white;
+            font-weight: bold;
             padding: 3px 2px !important;
+            text-align: center;
+            border: 1px solid #3a5a8a !important;
+            border-top: 1px solid #3a5a8a !important;
+            border-right: 1px solid #3a5a8a !important;
+            border-bottom: 1px solid #3a5a8a !important;
+            border-left: 1px solid #3a5a8a !important;
+            font-size: 0.55rem !important;
             height: 24px !important;
+        }
+
+        .dark-mode #screenshot-container th {
+            background-color: #333333 !important;
+            border: 1px solid #444444 !important;
+            border-top: 1px solid #444444 !important;
+            border-right: 1px solid #444444 !important;
+            border-bottom: 1px solid #444444 !important;
+            border-left: 1px solid #444444 !important;
         }
 
         #screenshot-container td {
             padding: 2px 2px !important;
+            text-align: center;
+            border: 1px solid #ddd !important;
+            border-top: 1px solid #ddd !important;
+            border-right: 1px solid #ddd !important;
+            border-bottom: 1px solid #ddd !important;
+            border-left: 1px solid #ddd !important;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-size: 8.5px !important;
         }
 
-        #screenshot-container thead .time-column,
-        #screenshot-container tbody .time-column {
-            font-size: 0.55rem !important;
+        .dark-mode #screenshot-container td {
+            border: 1px solid #444444 !important;
+            border-top: 1px solid #444444 !important;
+            border-right: 1px solid #444444 !important;
+            border-bottom: 1px solid #444444 !important;
+            border-left: 1px solid #444444 !important;
+            color: #e0e0e0;
+        }
+
+        #screenshot-container thead .time-column {
+            background-color: #4a6fa5 !important;
+            color: white !important;
+            border: 1px solid #3a5a8a !important;
+            border-top: 1px solid #3a5a8a !important;
+            border-right: 1px solid #3a5a8a !important;
+            border-bottom: 1px solid #3a5a8a !important;
+            border-left: 1px solid #3a5a8a !important;
             width: 63px !important;
+        }
+
+        .dark-mode #screenshot-container thead .time-column {
+            background-color: #333333 !important;
+            border: 1px solid #444444 !important;
+            border-top: 1px solid #444444 !important;
+            border-right: 1px solid #444444 !important;
+            border-bottom: 1px solid #444444 !important;
+            border-left: 1px solid #444444 !important;
+        }
+
+        #screenshot-container tbody .time-column {
+            background-color: #e8eaf6 !important;
+            color: #000 !important;
+            font-weight: bold !important;
+            border: 1px solid #c5cae9 !important;
+            border-top: 1px solid #c5cae9 !important;
+            border-right: 1px solid #c5cae9 !important;
+            border-bottom: 1px solid #c5cae9 !important;
+            border-left: 1px solid #c5cae9 !important;
+            font-size: 0.55rem !important;
+            padding: 2px 2px !important;
+            width: 63px !important;
+            white-space: nowrap;
+        }
+
+        .dark-mode #screenshot-container tbody .time-column {
+            background-color: #2a2a2a !important;
+            color: #e0e0e0 !important;
+            border: 1px solid #444444 !important;
+            border-top: 1px solid #444444 !important;
+            border-right: 1px solid #444444 !important;
+            border-bottom: 1px solid #444444 !important;
+            border-left: 1px solid #444444 !important;
         }
 
         #screenshot-container .even-timezone-table tbody tr.half-hour-row {
@@ -366,6 +664,27 @@
             height: 35px !important;
         }
 
+        #screenshot-container .axpower {
+            background-color: #ffebee !important;
+        }
+
+        .dark-mode #screenshot-container .axpower {
+            background-color: #331a1a !important;
+        }
+
+        #screenshot-container .axpower-text {
+            color: #d32f2f !important;
+            font-weight: bold !important;
+        }
+
+        #screenshot-container .black-text {
+            color: #000 !important;
+        }
+
+        .dark-mode #screenshot-container .black-text {
+            color: #e0e0e0 !important;
+        }
+
         /* IMPORTANT: Remove active event styling from screenshot */
         #screenshot-container .active-event {
             background-color: inherit !important;
@@ -376,12 +695,31 @@
             display: none !important;
         }
 
+        /* Ensure all borders are explicitly set for table cells in screenshot */
+        #screenshot-container td,
+        #screenshot-container th {
+            border-width: 1px !important;
+            border-style: solid !important;
+        }
+
+        /* Make sure table border is visible in screenshot */
+        #screenshot-container table {
+            border-width: 1px !important;
+            border-style: solid !important;
+            border-spacing: 0 !important;
+        }
+
         .screenshot-title {
             color: #333;
             text-align: center;
             margin-bottom: 12px;
             font-size: 1.2rem;
             font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .screenshot-title {
+            color: #e0e0e0 !important;
         }
 
         .screenshot-note {
@@ -390,10 +728,20 @@
             border-radius: 3px;
             margin-bottom: 8px;
             font-size: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .dark-mode .screenshot-note {
+            background-color: #2a2a2a !important;
         }
 
         .screenshot-note strong {
             color: #333;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .screenshot-note strong {
+            color: #cccccc !important;
         }
 
         .screenshot-timezone {
@@ -401,10 +749,38 @@
             font-size: 10px;
             margin-bottom: 8px;
             text-align: center;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .screenshot-timezone {
+            color: #aaaaaa !important;
         }
 
         .screenshot-timezone strong {
-            color: #4a6fa5;
+            color: #4a6fa5; /* Blue for light mode */
+            transition: color 0.3s;
+        }
+
+        .dark-mode .screenshot-timezone strong {
+            color: #ff6b35 !important; /* Orange only for dark mode */
+        }
+
+        /* Dark mode screenshot specific styles */
+        .dark-mode #screenshot-container .cycle-box {
+            background-color: #2a2a2a !important;
+            color: #cccccc !important;
+        }
+
+        .dark-mode #screenshot-container .cycle-box strong {
+            color: #e0e0e0 !important;
+        }
+
+        .dark-mode #screenshot-container .cycle-box li {
+            color: #aaaaaa !important;
+        }
+
+        .dark-mode #screenshot-container tr:nth-child(even) {
+            background-color: #2a2a2a !important;
         }
 
         /* Responsive design */
@@ -457,7 +833,7 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 4px 8px 8px 8px; /* Reduced top padding */
             }
             
             .schedule-container {
@@ -485,7 +861,8 @@
             .timezone-info label,
             .timezone-selector,
             .current-timezone,
-            .export-link {
+            .export-link,
+            .mode-toggle-link {
                 font-size: 9px;
             }
             
@@ -526,7 +903,7 @@
 
         @media (max-width: 576px) {
             body {
-                padding: 6px;
+                padding: 2px 6px 6px 6px; /* Reduced top padding */
             }
             
             .schedule-container {
@@ -567,7 +944,8 @@
             .timezone-info label,
             .timezone-selector,
             .current-timezone,
-            .export-link {
+            .export-link,
+            .mode-toggle-link {
                 font-size: 8px;
             }
             
@@ -617,7 +995,7 @@
         @media (max-width: 480px) and (orientation: portrait) {
             /* Portrait-specific mobile adjustments */
             body {
-                padding: 4px;
+                padding: 0 4px 4px 4px; /* Reduced top padding to 0 */
             }
             
             .schedule-container {
@@ -669,7 +1047,8 @@
             .timezone-info label,
             .timezone-selector,
             .current-timezone,
-            .export-link {
+            .export-link,
+            .mode-toggle-link {
                 font-size: 7px;
             }
             
@@ -799,6 +1178,10 @@
 
         /* Landscape adjustments */
         @media (max-width: 768px) and (orientation: landscape) {
+            body {
+                padding: 4px 8px 8px 8px; /* Reduced top padding */
+            }
+            
             .schedule-container {
                 padding: 8px;
                 max-width: 95%;
@@ -824,6 +1207,11 @@
     </style>
 </head>
 <body>
+    <!-- Dark/Light Mode Toggle - Small Text Link -->
+    <div class="mode-toggle-container">
+        <a class="mode-toggle-link" id="mode-toggle">Dark Mode</a>
+    </div>
+
     <div class="schedule-container">
         <h1>TFD Axion Operational Area Rotation</h1>
         
@@ -907,7 +1295,7 @@
         </div>
 
         <footer class="page-footer">
-            <p>TFD Axion Operational Area Rotation | Unofficial Fan Resource | Data sourced from game events</p>
+            <p>TFD Axion Operational Area Rotation | Unofficial Fan Resource | created by suprstylin#4055</p>
             <p>This site is not affiliated with NEXON Korea Corp. or The First Descendant.</p>
         </footer>
     </div>
@@ -1013,6 +1401,24 @@
             '13': 'GMT+13 (Tonga)',
             '14': 'GMT+14 (Line Islands)'
         };
+
+        // Function to get timezone display text for current view
+        function getTimezoneDisplayText(timezoneOffset) {
+            const isMobilePortrait = window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
+            const timezoneString = timezoneNames[timezoneOffset];
+            
+            if (isMobilePortrait) {
+                // For mobile portrait, show only GMT offset (remove the name in parentheses)
+                // Extract just the GMT part (e.g., "GMT-5")
+                const match = timezoneString.match(/^(GMT[+-]\d+)/);
+                if (match) {
+                    return match[0];
+                }
+            }
+            
+            // For desktop/landscape or if regex fails, return full string
+            return timezoneString;
+        }
 
         // Check if event involves AX Power
         function isAXPowerEvent(eventStr) {
@@ -1298,12 +1704,43 @@
             return roundedOffset;
         }
 
+        // Toggle dark/light mode
+        function toggleDarkMode() {
+            const body = document.body;
+            const modeToggle = document.getElementById('mode-toggle');
+            const isDarkMode = body.classList.contains('dark-mode');
+            
+            if (isDarkMode) {
+                body.classList.remove('dark-mode');
+                modeToggle.textContent = 'Dark Mode';
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                body.classList.add('dark-mode');
+                modeToggle.textContent = 'Light Mode';
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
+        // Update timezone display text based on viewport
+        function updateTimezoneDisplay() {
+            const currentTimezone = parseInt(document.getElementById('timezone-selector').value);
+            const display = document.getElementById('current-tz-display');
+            display.textContent = getTimezoneDisplayText(currentTimezone);
+        }
+
         // Create screenshot content - always use desktop dimensions
         function createScreenshotContent(currentTimezoneName) {
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
             
             screenshotContainer.style.width = '800px';
+            
+            // Apply dark mode to screenshot container if needed
+            if (document.body.classList.contains('dark-mode')) {
+                screenshotContainer.classList.add('dark-mode');
+            } else {
+                screenshotContainer.classList.remove('dark-mode');
+            }
             
             // Create title
             const title = document.createElement('h1');
@@ -1317,47 +1754,51 @@
             note.innerHTML = `<strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for <strong>${currentTimezoneName}</strong>.`;
             screenshotContainer.appendChild(note);
             
-            // Clone the table but remove active-event classes
+            // Clone the entire table structure exactly
             const originalTable = document.getElementById('schedule-table');
             const table = originalTable.cloneNode(true);
+            
+            // Copy all classes exactly
+            table.className = originalTable.className;
+            table.id = 'screenshot-table';
             
             // Remove active-event classes from cloned table
             const activeCells = table.querySelectorAll('.active-event');
             activeCells.forEach(cell => {
                 cell.classList.remove('active-event');
-                // Remove the ::after pseudo-element content
-                cell.style.setProperty('--after-content', 'none');
+                // Also remove the inline styles that might override borders
+                cell.style.border = '';
+                cell.style.boxShadow = '';
+                cell.style.position = '';
             });
             
-            table.style.margin = '0';
-            table.style.width = '100%';
-            table.style.borderBottom = '1px solid #e0e0e0';
+            // Remove any ::after pseudo elements by removing the class
+            const allCells = table.querySelectorAll('td, th');
+            allCells.forEach(cell => {
+                cell.style.setProperty('--after-content', 'none', 'important');
+            });
             
-            // Remove bottom margin from the last row
-            const lastRow = table.querySelector('tbody tr:last-child');
-            if (lastRow) {
-                lastRow.style.marginBottom = '0';
-            }
-            
-            // Ensure AX Power cells have red background and proper text styling
+            // Ensure AX Power cells have correct styling
             const cells = table.querySelectorAll('td');
             cells.forEach(cell => {
+                // Reset any inline styles
+                cell.style.border = '';
+                cell.style.borderWidth = '';
+                cell.style.borderStyle = '';
+                cell.style.borderColor = '';
+                
+                // Make sure AX Power cells have the correct class
                 if (cell.innerHTML.includes('AX Power') || cell.innerHTML.includes('Power')) {
-                    // Make sure AX Power text is red and other text is black
-                    const content = cell.innerHTML;
-                    if (content.includes('AX Power /') || content.includes('Power /')) {
-                        const firstPart = content.includes('AX Power') ? 'AX Power' : 'Power';
-                        const secondPart = content.split(' / ')[1];
-                        cell.innerHTML = `<span class="axpower-text">${firstPart}</span><span class="black-text"> / ${secondPart}</span>`;
-                    } else if (content.includes('/ AX Power') || content.includes('/ Power')) {
-                        const secondPart = content.includes('/ AX Power') ? 'AX Power' : 'Power';
-                        const firstPart = content.split(' / ')[0];
-                        cell.innerHTML = `<span class="black-text">${firstPart} / </span><span class="axpower-text">${secondPart}</span>`;
+                    if (!cell.classList.contains('axpower')) {
+                        cell.classList.add('axpower');
                     }
-                    // Ensure the cell has the axpower class for background
-                    cell.classList.add('axpower');
                 }
             });
+            
+            // Make sure table has border
+            table.style.border = '1px solid #e0e0e0';
+            table.style.borderCollapse = 'collapse';
+            table.style.borderSpacing = '0';
             
             screenshotContainer.appendChild(table);
             
@@ -1381,7 +1822,7 @@
             // Use html2canvas to capture the screenshot container
             html2canvas(screenshotContainer, {
                 scale: scale,
-                backgroundColor: '#ffffff',
+                backgroundColor: document.body.classList.contains('dark-mode') ? '#1a1a1a' : '#ffffff',
                 useCORS: true,
                 logging: false,
                 width: 800,
@@ -1394,6 +1835,13 @@
                         clonedContainer.style.padding = '12px 10px 1px 10px';
                         clonedContainer.style.boxShadow = 'none';
                         clonedContainer.style.fontSize = '11px';
+                        
+                        // Ensure borders are properly set in cloned document
+                        const table = clonedContainer.querySelector('table');
+                        if (table) {
+                            table.style.border = '1px solid #e0e0e0';
+                            table.style.borderCollapse = 'collapse';
+                        }
                     }
                 }
             }).then(canvas => {
@@ -1401,7 +1849,8 @@
                 const link = document.createElement('a');
                 const dateStr = new Date().toISOString().slice(0,10);
                 const timezoneStr = currentTimezoneName.replace(/[^a-zA-Z0-9+ -]/g, '').replace(/\s+/g, '-');
-                link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}.png`;
+                const modeStr = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+                link.download = `TFD-Axion-Schedule-${dateStr}-${timezoneStr}-${modeStr}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 
@@ -1427,6 +1876,7 @@
             resizeTimeout = setTimeout(function() {
                 const currentTimezone = parseInt(document.getElementById('timezone-selector').value);
                 generateSchedule(currentTimezone);
+                updateTimezoneDisplay();
             }, 250);
         }
 
@@ -1449,12 +1899,20 @@
             const selector = document.getElementById('timezone-selector');
             const display = document.getElementById('current-tz-display');
             const exportLink = document.getElementById('export-link');
+            const modeToggle = document.getElementById('mode-toggle');
+            
+            // Check for saved dark mode preference
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (savedDarkMode === 'true') {
+                document.body.classList.add('dark-mode');
+                modeToggle.textContent = 'Light Mode';
+            }
             
             const userOffset = detectUserTimezone();
             selector.value = userOffset;
             
             generateSchedule(userOffset);
-            display.textContent = timezoneNames[userOffset];
+            updateTimezoneDisplay();
             toggleEvenTimezoneNote(userOffset);
             
             // Start the highlight update interval
@@ -1463,7 +1921,7 @@
             selector.addEventListener('change', function() {
                 const offset = parseInt(this.value);
                 generateSchedule(offset);
-                display.textContent = timezoneNames[this.value];
+                updateTimezoneDisplay();
                 toggleEvenTimezoneNote(offset);
                 
                 // Restart interval with new timezone
@@ -1472,6 +1930,9 @@
             
             // Add event listener for export link
             exportLink.addEventListener('click', exportTableAsImage);
+            
+            // Add event listener for dark mode toggle
+            modeToggle.addEventListener('click', toggleDarkMode);
             
             // Add resize event listener
             window.addEventListener('resize', handleResize);
