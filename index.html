@@ -1343,32 +1343,43 @@
             'SRD': 'Sealed Resident District'
         };
 
+        // Regular display names (for desktop, landscape, and exports)
+        const regularDisplayNames = {
+            'AX_Power': 'AX Power',
+            'TRI': 'TRI',
+            'EDZ': 'EDZ',
+            'AX_Vault': 'AX Vault',
+            'Crater': 'Crater',
+            'AX_Refinery': 'AX Refinery',
+            'SRD': 'SRD'
+        };
+
+        // Short display names for mobile portrait view only
+        const shortDisplayNames = {
+            'AX_Power': 'Power',
+            'TRI': 'TRI',
+            'EDZ': 'EDZ',
+            'AX_Vault': 'AXV',
+            'Crater': 'FC',
+            'AX_Refinery': 'AXR',
+            'SRD': 'SRD'
+        };
+
         // Shorter display names for mobile
-        function getDisplayNames() {
+        function getDisplayNames(forExport = false) {
+            // For exports, always use regular names
+            if (forExport) {
+                return regularDisplayNames;
+            }
+            
             const isMobilePortrait = window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
             
             if (isMobilePortrait) {
-                // Short names for mobile portrait view
-                return {
-                    'AX_Power': 'Power',
-                    'TRI': 'TRI',
-                    'EDZ': 'EDZ',
-                    'AX_Vault': 'AXV',
-                    'Crater': 'FC',
-                    'AX_Refinery': 'AXR',
-                    'SRD': 'SRD'
-                };
+                // Short names for mobile portrait view only
+                return shortDisplayNames;
             } else {
-                // Regular display names for desktop and landscape
-                return {
-                    'AX_Power': 'AX Power',
-                    'TRI': 'TRI',
-                    'EDZ': 'EDZ',
-                    'AX_Vault': 'AX Vault',
-                    'Crater': 'Crater',
-                    'AX_Refinery': 'AX Refinery',
-                    'SRD': 'SRD'
-                };
+                // Regular display names for desktop, landscape, and non-portrait mobile
+                return regularDisplayNames;
             }
         }
 
@@ -1422,9 +1433,8 @@
             '14': 'GMT+14 (Line Islands)'
         };
 
-        // Function to get timezone display text for current view - ALWAYS returns full name
+        // Function to get timezone display text for current view
         function getTimezoneDisplayText(timezoneOffset) {
-            // Always return the full timezone string
             return timezoneNames[timezoneOffset] || `GMT${timezoneOffset >= 0 ? '+' : ''}${timezoneOffset}`;
         }
 
@@ -1595,13 +1605,15 @@
         }
 
         // Generate the schedule table
-        function generateSchedule(timezoneOffset) {
-            const tbody = document.getElementById('schedule-body');
-            tbody.innerHTML = '';
+        function generateSchedule(timezoneOffset, forExport = false) {
+            const tbody = forExport ? document.createElement('tbody') : document.getElementById('schedule-body');
+            if (!forExport) {
+                tbody.innerHTML = '';
+            }
             
             const isEven = isEvenTimezone(timezoneOffset);
             const timeSlots = isEven ? getTimeSlotsEven() : getTimeSlotsOdd();
-            const displayNames = getDisplayNames();
+            const displayNames = getDisplayNames(forExport);
             
             timeSlots.forEach((timeSlot, timeSlotIndex) => {
                 const row = document.createElement('tr');
@@ -1648,7 +1660,7 @@
                         const displayName2 = displayNames[part2] || part2;
                         
                         // Check if we're on mobile portrait for adding special class
-                        const isMobilePortrait = window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
+                        const isMobilePortrait = !forExport && window.innerWidth <= 480 && window.matchMedia("(orientation: portrait)").matches;
                         
                         // Create colored text for AX Power only, rest in black
                         let cellContent = '';
@@ -1695,8 +1707,12 @@
                 tbody.appendChild(row);
             });
             
-            // Highlight current event after generating schedule
-            highlightCurrentEvent(timezoneOffset);
+            if (!forExport) {
+                // Highlight current event after generating schedule (only for website)
+                highlightCurrentEvent(timezoneOffset);
+            }
+            
+            return tbody;
         }
 
         // Detect user's timezone offset
@@ -1736,7 +1752,7 @@
             display.textContent = getTimezoneDisplayText(currentTimezone);
         }
 
-        // Create screenshot content - always use desktop dimensions
+        // Create screenshot content - always use desktop dimensions and regular display names
         function createScreenshotContent(currentTimezoneName) {
             const screenshotContainer = document.getElementById('screenshot-container');
             screenshotContainer.innerHTML = '';
@@ -1762,45 +1778,48 @@
             note.innerHTML = `<strong>Note:</strong> This schedule shows the "Operational Area" missions in Axion for <strong>${currentTimezoneName}</strong>.`;
             screenshotContainer.appendChild(note);
             
-            // Clone the entire table structure exactly
-            const originalTable = document.getElementById('schedule-table');
-            const table = originalTable.cloneNode(true);
+            // Create a new table for screenshot with regular display names
+            const currentTimezone = parseInt(document.getElementById('timezone-selector').value);
+            const isEven = isEvenTimezone(currentTimezone);
             
-            // Copy all classes exactly
-            table.className = originalTable.className;
+            const table = document.createElement('table');
             table.id = 'screenshot-table';
+            if (isEven) {
+                table.classList.add('even-timezone-table');
+            }
             
-            // Remove active-event classes from cloned table
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            const timeHeader = document.createElement('th');
+            timeHeader.className = 'time-column';
+            timeHeader.textContent = 'Local Time';
+            headerRow.appendChild(timeHeader);
+            
+            daysOfWeek.forEach(day => {
+                const dayHeader = document.createElement('th');
+                dayHeader.textContent = day;
+                headerRow.appendChild(dayHeader);
+            });
+            
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // Generate schedule with regular display names (forExport = true)
+            const tbody = generateSchedule(currentTimezone, true);
+            table.appendChild(tbody);
+            
+            // Remove mobile-short classes from screenshot table
+            const shortElements = table.querySelectorAll('.mobile-short');
+            shortElements.forEach(el => {
+                el.classList.remove('mobile-short');
+            });
+            
+            // Remove active-event classes from screenshot table
             const activeCells = table.querySelectorAll('.active-event');
             activeCells.forEach(cell => {
                 cell.classList.remove('active-event');
-                // Also remove the inline styles that might override borders
-                cell.style.border = '';
-                cell.style.boxShadow = '';
-                cell.style.position = '';
-            });
-            
-            // Remove any ::after pseudo elements by removing the class
-            const allCells = table.querySelectorAll('td, th');
-            allCells.forEach(cell => {
-                cell.style.setProperty('--after-content', 'none', 'important');
-            });
-            
-            // Ensure AX Power cells have correct styling
-            const cells = table.querySelectorAll('td');
-            cells.forEach(cell => {
-                // Reset any inline styles
-                cell.style.border = '';
-                cell.style.borderWidth = '';
-                cell.style.borderStyle = '';
-                cell.style.borderColor = '';
-                
-                // Make sure AX Power cells have the correct class
-                if (cell.innerHTML.includes('AX Power') || cell.innerHTML.includes('Power')) {
-                    if (!cell.classList.contains('axpower')) {
-                        cell.classList.add('axpower');
-                    }
-                }
             });
             
             // Make sure table has border
@@ -1813,7 +1832,7 @@
             return screenshotContainer;
         }
 
-        // Export table as image - always generate same quality image
+        // Export table as image - always generate same quality image with regular display names
         function exportTableAsImage(event) {
             event.preventDefault();
             
@@ -1883,7 +1902,7 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
                 const currentTimezone = parseInt(document.getElementById('timezone-selector').value);
-                generateSchedule(currentTimezone);
+                generateSchedule(currentTimezone, false);
                 updateTimezoneDisplay();
             }, 250);
         }
@@ -1919,7 +1938,7 @@
             const userOffset = detectUserTimezone();
             selector.value = userOffset;
             
-            generateSchedule(userOffset);
+            generateSchedule(userOffset, false);
             updateTimezoneDisplay();
             toggleEvenTimezoneNote(userOffset);
             
@@ -1928,7 +1947,7 @@
             
             selector.addEventListener('change', function() {
                 const offset = parseInt(this.value);
-                generateSchedule(offset);
+                generateSchedule(offset, false);
                 updateTimezoneDisplay();
                 toggleEvenTimezoneNote(offset);
                 
